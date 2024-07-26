@@ -26,7 +26,7 @@ export default function Home() {
               href="https://create.t3.gg/en/usage/first-steps"
               target="_blank"
             >
-              <h3 className="text-2xl font-bold">First Steps →</h3>
+              <h3 className="text-2xl font-bold">First Steps Hello→</h3>
               <div className="text-lg">
                 Just the basics - Everything you need to know to set up your
                 database and authentication.
@@ -43,6 +43,10 @@ export default function Home() {
                 to deploy it.
               </div>
             </Link>
+          </div>
+          <div className="bg-black l-300px w-300px text-white font-bold">Hi guys, Apologies for the late update.This link should work
+             if you are reading this, finally pushed
+            this through to deployment. Will add more stuff tomorrow, until then good afternoon, good evening and good night.
           </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
