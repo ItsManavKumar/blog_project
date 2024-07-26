@@ -48,6 +48,8 @@ export default function Home() {
              if you are reading this, finally pushed
             this through to deployment. Will add more stuff tomorrow, until then good afternoon, good evening and good night.
           </div>
+          <div className="bg-green-700 l-300px w-300px text-white font-bold">Ignore the ugly ass bar on top, ill fix it later.
+          </div>
           <div className="flex flex-col items-center gap-2">
             <p className="text-2xl text-white">
               {hello.data ? hello.data.greeting : "Loading tRPC query..."}
