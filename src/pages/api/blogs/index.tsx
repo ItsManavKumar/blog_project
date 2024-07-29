@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { GetServerSideProps } from 'next';
 import { prisma } from '../../../lib/prisma';
 import { getSession, useSession } from 'next-auth/react';
