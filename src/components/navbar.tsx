@@ -1,52 +1,79 @@
+import React from 'react';
+import { signIn, signOut, useSession } from 'next-auth/react';
+import Link from 'next/link';
+
 interface NavLink {
   label: string;
   href: string;
 }
 
-const navLinks: NavLink[] = [
-  { label: "Home", href: "/" },
-  { label: "Explore", href: "/explore" },
-  { label: "Write", href: "/new" },
-  { label: "Sign In", href: "/login" },
-];
+const navLinks: NavLink[] = [];
 
 const Navbar: React.FC = () => {
+  const { data: sessionData } = useSession();
+
   return (
-    <nav className="flex items-center justify-between bg-gray-800 px-4 py-2 text-gray-200">
-      <a href="" className="text-xl font-bold">
-        DEV Community
-      </a>
+    <nav className="flex items-center justify-between bg-white px-20 py-2 text-black shadow-md">
+      <Link href="#" className="flex items-center">
+        <img
+          src="https://media.dev.to/cdn-cgi/image/quality=100/https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
+          className="h-10"
+          alt="Logo"
+        ></img>
+        </Link>
       <ul className="hidden space-x-4 lg:flex">
         {navLinks.map((link) => (
           <li key={link.label}>
-            <a href={link.href} className="hover:text-gray-100">
+            <Link href={link.href} className="hover:text-gray-100">
               {link.label}
-            </a>
+            </Link>
           </li>
         ))}
+        <li>
+          <Link href="/blogs" className="hover:text-gray-100">
+            Blogs
+          </Link>
+        </li>
       </ul>
-      <button className="focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 lg:hidden">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          className="h-6 w-6"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 6h16v12a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4 12v6m16-6v6"
-          />
-        </svg>
-      </button>
+    
+      <div className="flex items-center space-x-4">
+        {/* Log In Button */}
+        {!sessionData && (
+          <button
+            className="hidden lg:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 hover:text-[#3b49df] transition"
+            onClick={() => void signIn()}
+          >
+            Log In
+          </button>
+        )}
+        {/* Create Account Button */}
+        {!sessionData && (
+          <button
+            className="bg-white/10 border-[1px] border-[#3b49df] text-md text-[#3b49df] px-4 py-1.5 rounded-md hover:bg-[#3b49df] hover:text-white transition"
+            onClick={() => void signIn()}
+          >
+            Create Account
+          </button>
+        )}
+        {/* Create Post Button */}
+        {sessionData && (
+          <Link
+            href="/create"
+            className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+          >
+            Create Post
+          </Link>
+        )}
+        {/* Sign Out Button */}
+        {sessionData && (
+          <button
+            className="bg-red-600 border-2 font-semibold border-red-600 text-sm text-white px-4 py-1 rounded hover:bg-red-700 transition"
+            onClick={() => void signOut()}
+          >
+            Sign out
+          </button>
+        )}
+      </div>
     </nav>
   );
 };

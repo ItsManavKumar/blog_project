@@ -15,8 +15,6 @@ const MyApp: AppType<{ session: Session | null }> = ({
   return (
 
     <SessionProvider session={session}>
-          <Navbar> 
-          </Navbar>
       <div className={GeistSans.className}>
         <Component {...pageProps} />
       </div>
