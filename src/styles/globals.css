@@ -5,3 +5,9 @@
 .hover\:bg-customHover:hover {
     background-color: rgb(47, 58, 178);
   }
+
+  @media (max-width: 770px) {
+    .sidebar-hidden {
+      display: none;
+    }
+  }

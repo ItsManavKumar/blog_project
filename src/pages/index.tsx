@@ -7,7 +7,7 @@ import Card from "~/components/card";
 import RightSection from "../components/rightSection";
 import Hunter from "../../public/hunter.jpg";
 import Onepiece from "../../public/onePiece.jpg";
-import LandScape from "../../public/landscape.webp"
+import LandScape from "../../public/landscape.webp";
 
 export default function Home() {
   const hello = api.post.hello.useQuery({ text: "from tRPC" });
@@ -21,41 +21,55 @@ export default function Home() {
       </Head>
       <Navbar />
 
-      <main className="flex flex-col min-h-screen bg-gray-100 py-4 pt-20">
-        
-        <div className="flex justify-center">
-          <div className="w-[calc(100%-160px)] flex gap-4">
-            <div id="left" className="hidden w-1/6 min-w-[240px] sm:flex flex-col text-gray-700 ">
+      <main className="flex min-h-screen flex-col bg-gray-100 py-4 pt-20">
+        <div className="flex lg:justify-center">
+          <div className="flex lg:w-[calc(100%-160px)] gap-4">
+            <div
+              id="left"
+              className="sidebar-hidden flex-col text-gray-700 lg:block lg:w-1/6 min-w-[240px]"
+            >
               <Sidebar />
             </div>
 
-            <div id="middle" className="flex-1 min-w-[400px] max-w-[750px] flex flex-col gap-4 ">
+            <div
+              id="middle"
+              className="flex min-w-[450px] max-w-[750px] flex-col gap-4"
+            >
               <div className="flex gap-4">
-                <button className="text-lg font-semibold hover:bg-white hover:text-[#3b49df] px-4 py-2 rounded-md text-black">Relevant</button>
-                <button className="text-lg hover:bg-white hover:text-[#3b49df] px-4 py-2 rounded-md text-[#404040]">Latest</button>
-                <button className="text-lg hover:bg-white hover:text-[#3b49df] px-4 py-2 rounded-md text-[#404040]">Top</button>
+                <button className="rounded-md px-4 py-2 text-lg font-semibold text-black hover:bg-white hover:text-[#3b49df]">
+                  Relevant
+                </button>
+                <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
+                  Latest
+                </button>
+                <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
+                  Top
+                </button>
               </div>
-              <Card 
-              imageSrc={LandScape} 
-              username="@Lord_Laxus" 
-              title="Title - Hello Hello" 
-              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-            />
-            <Card 
-              imageSrc={Onepiece} 
-              username="@GodFather69" 
-              title="Title - Hello Hello" 
-              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-            />
-            <Card 
-              imageSrc={Hunter} 
-              username="@Lord_Explosion_Murder" 
-              title="Title - Hello Hello" 
-              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-            />
+              <Card
+                imageSrc={LandScape}
+                username="@Lord_Laxus"
+                title="Title - Hello Hello"
+                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+              />
+              <Card
+                imageSrc={Onepiece}
+                username="@GodFather69"
+                title="Title - Hello Hello"
+                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+              />
+              <Card
+                imageSrc={Hunter}
+                username="@Lord_Explosion_Murder"
+                title="Title - Hello Hello"
+                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+              />
             </div>
 
-            <div id="right" className="hidden w-1/4 min-w-[350px] flex-col lg:flex bg-gray-50">
+            <div
+              id="right"
+              className="hidden w-1/4 min-w-[350px] flex-col bg-gray-50 lg:flex"
+            >
               <RightSection />
             </div>
           </div>
