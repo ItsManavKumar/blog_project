@@ -15,6 +15,9 @@ export default {
       fontFamily: {
         sans: ["var(--font-geist-sans)", ...fontFamily.sans],
       },
+      colors: {
+        customHover: 'rgb(47, 58, 158)',
+      }
     },
   },
   plugins: [],

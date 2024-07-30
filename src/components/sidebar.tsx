@@ -1,0 +1,150 @@
+import React from "react";
+import {
+  HomeIcon,
+  FilmIcon,
+  MicrophoneIcon,
+  VideoCameraIcon,
+  TagIcon,
+  LightBulbIcon,
+  ShoppingBagIcon,
+  HeartIcon,
+  TrophyIcon,
+  SparklesIcon,
+  BookOpenIcon,
+  FaceSmileIcon,
+  HandThumbUpIcon,
+  FaceFrownIcon,
+  EyeSlashIcon,
+  ChatBubbleBottomCenterIcon
+} from "@heroicons/react/24/solid";
+
+const Sidebar = () => {
+  return (
+    <nav
+      id="sidebar"
+      className="flex flex-col overflow-hidden rounded-md" /*add border-lg and bg-yellow-500 before editing */
+    >
+      <ul className="space-y-2">
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 py-[16px] flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <HomeIcon className="h-6 w-6 text-yellow-500" />
+            <span>Home</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <MicrophoneIcon className="h-6 w-6 text-black" />
+            <span>Podcasts</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <FilmIcon className="h-6 w-6 text-gray-500" />
+            <span>Videos</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <TagIcon className="h-6 w-6 text-green-500" />
+            <span>Tags</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <LightBulbIcon className="h-6 w-6 text-yellow-400" />
+            <span>DEV Help</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <ShoppingBagIcon className="h-6 w-6 text-purple-500" />
+            <span>Forem Shop</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <HeartIcon className="h-6 w-6 text-red-600" />
+            <span>Advertise on DEV</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <TrophyIcon className="h-6 w-6 text-yellow-700" />
+            <span>DEV Challenges</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <SparklesIcon className="h-6 w-6 text-yellow-400" />
+            <span>DEV Showcase</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <SparklesIcon className="h-6 w-6 text-blue-500" />
+            <span>About</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <ChatBubbleBottomCenterIcon className="h-6 w-6 text-blue-500" />
+            <span>Contact</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <BookOpenIcon className="h-4 w-4 text-white bg-black" />
+            <span>Guides</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <FaceSmileIcon className="h-6 w-6 text-yellow-400 " />
+            <span>Software comparisons</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  );
+};
+
+export default Sidebar;
