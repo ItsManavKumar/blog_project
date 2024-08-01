@@ -12,7 +12,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ imageSrc, username, title, content }) => {
   return (
-    <div className="bg-white shadow-lg rounded-lg overflow-hidden max-w bg-white space-y-2">
+    <div className="bg-white shadow-lg rounded-lg overflow-hidden max-w space-y-2">
       {/* Image Section */}
       <Image
         src={imageSrc}

@@ -2,7 +2,6 @@
 /* eslint-disable react/jsx-no-undef */
 import React from "react";
 import Head from "next/head";
-import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
 import Card from "~/components/card";
@@ -10,7 +9,7 @@ import RightSection from "../components/rightSection";
 import Hunter from "../../public/hunter.jpg";
 import Onepiece from "../../public/onePiece.jpg";
 import LandScape from "../../public/landscape.webp";
-import { InfiniteTweetList } from "~/components/InfiniteTweetList";
+// import { InfiniteTweetList } from "~/components/InfiniteTweetList";
 
 export default function Home() {
   // Define RecentBlogs as a component

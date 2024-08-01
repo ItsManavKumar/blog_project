@@ -46,7 +46,7 @@ const Navbar: React.FC = () => {
         {/* Sign Out Button - Only shown when user is signed in */}
         {sessionData && (
           <button
-            className="rounded rounded-full border-2 border-red-600 bg-red-600 px-4 py-1 text-sm font-semibold text-white transition hover:bg-red-700"
+            className="rounded border-2 border-red-600 bg-red-600 px-4 py-1 text-sm font-semibold text-white transition hover:bg-red-700"
             onClick={() => void signOut()}
           >
             Sign out

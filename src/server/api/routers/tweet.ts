@@ -5,8 +5,8 @@
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
 import { z } from "zod";
 import { type inferAsyncReturnType } from "@trpc/server";
-import { createTRPCContext } from "~/server/api/trpc";
-import { Tweet } from "@prisma/client";
+import { type createTRPCContext } from "~/server/api/trpc";
+import { type Tweet } from "@prisma/client";
 // Adjust import based on your actual database model types
 
 export const tweetRouter = createTRPCRouter({

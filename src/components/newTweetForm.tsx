@@ -1,5 +1,5 @@
-
 import { useSession } from "next-auth/react";
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {
   FormEvent,
   useCallback,
@@ -9,7 +9,6 @@ import {
 } from "react";
 import { api } from "~/utils/api"; // Ensure this import is correct
 import { Button } from "./Button";
-import { ProfileImage } from "./ProfileImage";
 
 function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
   if (textArea == null) return;
@@ -33,7 +32,7 @@ function Form() {
     textAreaRef.current = textArea;
   }, []);
 
-  const trpcUtils = api.useContext(); // Ensure this usage is correct
+//   const trpcUtils = api.useContext(); // Ensure this usage is correct
 
   useLayoutEffect(() => {
     updateTextAreaSize(textAreaRef.current);
@@ -44,8 +43,6 @@ function Form() {
       setInputValue("");
 
       if (!session) return;
-
-
 
       // If infiniteProfileFeed is not necessary, remove related logic
       // Adjust the cache update according to your needs if applicable
@@ -59,26 +56,23 @@ function Form() {
   }
 
   return (
-    <div className="flex bg-gray-100 container mx-auto h-screen">
-
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-2 border-b px-4 py-2  mt-20 ml-20 w-[800px]"
-    >
-      <div className="flex gap-4 ">
-
-        <textarea
-          ref={inputRef}
-          style={{ }}
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          className="flex-grow resize-none overflow-hidden p-4 text-lg outline-none min-h-[200px] rounded-md"
-          placeholder="What's happening?"
-        />
-        
-      </div>
-      <Button className="self-start">Tweet</Button>
-    </form>
+    <div className="container mx-auto flex h-screen bg-gray-100">
+      <form
+        onSubmit={handleSubmit}
+        className="ml-20 mt-20 flex w-[800px] flex-col gap-2 border-b px-4 py-2"
+      >
+        <div className="flex gap-4">
+          <textarea
+            ref={inputRef}
+            style={{}}
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className="min-h-[200px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg outline-none"
+            placeholder="What's happening?"
+          />
+        </div>
+        <Button className="self-start">Tweet</Button>
+      </form>
     </div>
   );
 }
