@@ -1,5 +1,5 @@
-import React from 'react';
-import { signIn, signOut, useSession } from 'next-auth/react';
+import React from "react";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface NavLink {
   label: string;
@@ -16,7 +16,8 @@ const Navbar: React.FC = () => {
       <a href="#" className="flex items-center">
         <img
           src="https://media.dev.to/cdn-cgi/image/quality=100/https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
-          className="h-10"/>
+          className="h-10"
+        />
       </a>
       <ul className="hidden space-x-4 lg:flex">
         {navLinks.map((link) => (
@@ -30,14 +31,14 @@ const Navbar: React.FC = () => {
       <div className="flex items-center space-x-4">
         {/* Log In Button - Hidden on small screens */}
         <button
-          className="hidden lg:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 hover:text-[#3b49df] transition"
+          className="text-md hidden rounded border-2 border-none bg-white/10 px-4 py-1 text-[#404040] transition hover:bg-purple-200 hover:text-[#3b49df] lg:block"
           onClick={() => void signIn()}
         >
           Log In
         </button>
         {/* Create Account Button - Always visible */}
         <button
-          className="bg-white/10 border-[1px] border-[#3b49df] text-md text-[#3b49df] px-4 py-1.5 rounded-md hover:bg-[#3b49df] hover:text-white transition"
+          className="text-md rounded-md border-[1px] border-[#3b49df] bg-white/10 px-4 py-1.5 text-[#3b49df] transition hover:bg-[#3b49df] hover:text-white"
           onClick={() => void signIn()} // Update the URL to your sign-up page
         >
           Create Account
@@ -45,14 +46,14 @@ const Navbar: React.FC = () => {
         {/* Sign Out Button - Only shown when user is signed in */}
         {sessionData && (
           <button
-            className="rounded-full bg-red-600 border-2 font-semibold border-red-600 text-sm text-white px-4 py-1 rounded hover:bg-red-700 transition"
+            className="rounded rounded-full border-2 border-red-600 bg-red-600 px-4 py-1 text-sm font-semibold text-white transition hover:bg-red-700"
             onClick={() => void signOut()}
           >
             Sign out
           </button>
         )}
       </div>
-      <button className="lg:hidden focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2">
+      <button className="focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 lg:hidden">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           className="h-6 w-6"

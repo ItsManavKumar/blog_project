@@ -11,11 +11,14 @@ const navLinks: NavLink[] = [];
 
 const Navbar: React.FC = () => {
   const { data: sessionData } = useSession();
+  const session = useSession()
+const user = session.data?.user
+
 
   return (
     <nav className="fixed w-full bg-white text-gray-900 px-20 py-2 flex justify-center border border-gray-200 shadow-sm">
       <div className="container mx-auto flex items-center justify-between">
-        <Link href="#" className="flex items-center">
+        <Link href="/" className="flex items-center">
           <img
             src="https://media.dev.to/cdn-cgi/image/quality=100/https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
             className="h-10"
@@ -31,9 +34,9 @@ const Navbar: React.FC = () => {
             </li>
           ))}
           <li>
-            <Link href="/blogs" className="hover:text-gray-600">
+            {/* <Link href="/blogs" className="hover:text-gray-600">
               Blogs
-            </Link>
+            </Link> */}
           </li>
         </ul>
         <div className="flex items-center space-x-4">
@@ -57,18 +60,22 @@ const Navbar: React.FC = () => {
             <>
               <Link
                 href="/create"
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 transition"
+                className="hidden lg:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 transition"
               >
                 Create Post
               </Link>
               <button
-                className="bg-red-600 border-2 border-red-600 text-sm text-white px-4 py-1 rounded hover:bg-red-700 transition"
+                className="hidden lg:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 transition"
                 onClick={() => void signOut()}
               >
                 Sign out
               </button>
             </>
           )}
+
+          {user != null &&(
+          <Link href={`/profiles/${user.id}`}></Link>
+        )}
         </div>
       </div>
     </nav>

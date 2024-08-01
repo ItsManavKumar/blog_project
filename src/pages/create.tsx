@@ -1,11 +1,13 @@
 // src/pages/create.tsx
 
-import CreateBlog from "../components/createBlog";
+import Navbar from "~/components/navbar";
+import {NewTweetForm}  from "~/components/newTweetForm";
 
 const CreatePage: React.FC = () => {
   return (
     <div>
-      <CreateBlog />
+      <Navbar/>
+      <NewTweetForm/>
     </div>
   );
 };

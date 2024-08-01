@@ -26,6 +26,31 @@ model Post {
     @@index([name])
 }
 
+
+model Tweet {
+    id        String   @id @default(uuid())
+    userId    String
+    content   String
+    createdAt DateTime @default(now())
+
+    user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    likes Like[]
+
+    @@unique([createdAt, id])
+    @@index([userId])
+}
+
+model Like {
+    userId  String
+    tweetId String
+    user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+    Tweet   Tweet  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
+
+    @@id([userId, tweetId])
+    @@index([userId])
+    @@index([tweetId])
+}
+
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
@@ -63,6 +88,8 @@ model User {
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    tweets        Tweet[]
+    likes          Like[]
 }
 
 model VerificationToken {
@@ -83,3 +110,4 @@ model Blog {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
+

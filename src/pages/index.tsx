@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable react/jsx-no-undef */
 import React from "react";
 import Head from "next/head";
 import { api } from "~/utils/api";
@@ -8,9 +10,34 @@ import RightSection from "../components/rightSection";
 import Hunter from "../../public/hunter.jpg";
 import Onepiece from "../../public/onePiece.jpg";
 import LandScape from "../../public/landscape.webp";
+import { InfiniteTweetList } from "~/components/InfiniteTweetList";
 
 export default function Home() {
-  const hello = api.post.hello.useQuery({ text: "from tRPC" });
+  // Define RecentBlogs as a component
+  // function RecentBlogs() {
+  //   const {
+  //     data,
+  //     fetchNextPage,
+  //     hasNextPage,
+  //     isLoading,
+  //     isError,
+  //   } = api.tweet.infiniteFeed.useInfiniteQuery(
+  //     {},
+  //     {
+  //       getNextPageParam: (lastPage) => lastPage.nextCursor,
+  //     }
+  //   );
+
+  //   return (
+  //     <InfiniteTweetList
+  //       tweets={data?.pages.flatMap((page) => page.tweets) ?? []}
+  //       fetchNextPage={fetchNextPage}
+  //       hasMore={hasNextPage ?? false}
+  //       isLoading={isLoading}
+  //       isError={isError}
+  //     />
+  //   );
+  // }
 
   return (
     <>
@@ -70,6 +97,8 @@ export default function Home() {
               id="right"
               className="hidden w-1/4 min-w-[350px] flex-col bg-gray-50 lg:flex"
             >
+              {/* Render the RecentBlogs component here */}
+              {/* <RecentBlogs /> */}
               <RightSection />
             </div>
           </div>
