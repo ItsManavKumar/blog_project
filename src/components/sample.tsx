@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-undef */
 import React from "react";
 import { signIn, signOut, useSession } from "next-auth/react";
 
@@ -17,6 +18,7 @@ const Navbar: React.FC = () => {
         <img
           src="https://media.dev.to/cdn-cgi/image/quality=100/https://dev-to-uploads.s3.amazonaws.com/uploads/logos/resized_logo_UQww2soKuUsjaOGNB38o.png"
           className="h-10"
+          alt="logo"
         />
       </a>
       <ul className="hidden space-x-4 lg:flex">

@@ -73,10 +73,10 @@ const user = session.data?.user
             </>
           )}
 
-          {user != null &&(
+          {/* {user != null &&(
           <Link href={`/profiles/${user.id}`}></Link>
           
-        )}
+        )} */}
         </div>
       </div>
     </nav>
