@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -7,9 +6,7 @@ import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/
 import { z } from "zod";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type createTRPCContext } from "~/server/api/trpc";
-// import { Tweet } from "@prisma/client";
-import { type Tweet } from "@prisma/client";
-// Adjust import based on your actual database model types
+import { type Tweet } from "@prisma/client"; // Ensure this import is correct
 
 export const tweetRouter = createTRPCRouter({
   infiniteFeed: publicProcedure
@@ -30,13 +27,22 @@ export const tweetRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({ content: z.string().min(1) }))
-    .mutation(async ({ input: { content}, ctx }) => {
+    .input(z.object({
+      header: z.string().min(1),
+      content: z.string().min(1),
+      imageUrl: z.string().url().optional(),
+    }))
+    .mutation(async ({ input: { imageUrl, header, content }, ctx }) => {
       if (!ctx.session?.user) {
         throw new Error("User is not authenticated");
       }
       return ctx.db.tweet.create({
-        data: { content, userId: ctx.session.user.id },
+        data: {
+          imageUrl,
+          header,
+          content,
+          userId: ctx.session.user.id,
+        },
       });
     }),
 
@@ -49,7 +55,7 @@ async function getInfiniteTweets({
   limit,
   cursor,
 }: {
-  whereClause?: Partial<Tweet>; // Adjust this type based on your database schema
+  whereClause?: Partial<Tweet>; // Adjust based on your database schema
   limit: number;
   cursor: { id: string; createdAt: Date } | undefined;
   ctx: inferAsyncReturnType<typeof createTRPCContext>;
@@ -63,6 +69,8 @@ async function getInfiniteTweets({
     where: whereClause,
     select: {
       id: true,
+      imageUrl: true,
+      header: true,
       content: true,
       createdAt: true,
       _count: { select: { likes: true } },
@@ -84,16 +92,16 @@ async function getInfiniteTweets({
   }
 
   return {
-    tweets: data.map((tweet) => {
-      return {
-        id: tweet.id,
-        content: tweet.content,
-        createdAt: tweet.createdAt,
-        likeCount: tweet._count.likes,
-        user: tweet.user,
-        likedByMe: tweet.likes.length > 0,
-      };
-    }),
+    tweets: data.map((tweet) => ({
+      id: tweet.id,
+      header: tweet.header,
+      content: tweet.content,
+      imageUrl: tweet.imageUrl,
+      createdAt: tweet.createdAt,
+      likeCount: tweet._count.likes,
+      user: tweet.user,
+      likedByMe: tweet.likes.length > 0,
+    })),
     nextCursor,
   };
 }

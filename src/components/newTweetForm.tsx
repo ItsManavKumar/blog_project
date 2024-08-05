@@ -1,5 +1,4 @@
 import { useSession } from "next-auth/react";
-// eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import {
   FormEvent,
   useCallback,
@@ -24,55 +23,78 @@ export function NewTweetForm() {
 }
 
 function Form() {
-  const { data: session } = useSession();
-  const [inputValue, setInputValue] = useState("");
-  const textAreaRef = useRef<HTMLTextAreaElement>();
-  const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
-    updateTextAreaSize(textArea);
-    textAreaRef.current = textArea;
-  }, []);
-
-//   const trpcUtils = api.useContext(); // Ensure this usage is correct
-
-  useLayoutEffect(() => {
-    updateTextAreaSize(textAreaRef.current);
-  }, [inputValue]);
-
-  const createTweet = api.tweet.create.useMutation({
-    onSuccess: (newTweet) => {
-      setInputValue("");
-
-      if (!session) return;
-
-      // If infiniteProfileFeed is not necessary, remove related logic
-      // Adjust the cache update according to your needs if applicable
-      // e.g., updating local state or cache directly if using react-query or similar
-    },
-  });
-
-  function handleSubmit(e: FormEvent) {
-    e.preventDefault();
-    createTweet.mutate({ content: inputValue });
+    const { data: session } = useSession();
+    const [header, setHeader] = useState("");
+    const [content, setContent] = useState("");
+    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined); // Initialize as undefined
+    const textAreaRef = useRef<HTMLTextAreaElement>();
+    const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
+      updateTextAreaSize(textArea);
+      textAreaRef.current = textArea;
+    }, []);
+  
+    useLayoutEffect(() => {
+      if (textAreaRef.current) {
+        updateTextAreaSize(textAreaRef.current);
+      }
+    }, [content]);
+  
+    const createTweet = api.tweet.create.useMutation({
+      onSuccess: (newTweet) => {
+        setHeader("");
+        setContent("");
+        setImageUrl(undefined); // Reset to undefined
+  
+        if (!session) return;
+  
+        // Adjust cache update or state logic as needed
+      },
+    });
+  
+    function handleSubmit(e: FormEvent) {
+      e.preventDefault();
+      createTweet.mutate({ header, content, imageUrl: imageUrl ?? undefined });
+    }
+  
+    return (
+      <div className="container mx-auto flex h-screen bg-gray-100">
+        <form
+          onSubmit={handleSubmit}
+          className="ml-20 mt-20 flex w-[800px] flex-col gap-2 border-b px-4 py-2"
+        >
+          <div className="flex gap-4">
+            <input
+              type="text"
+              value={header}
+              onChange={(e) => setHeader(e.target.value)}
+              className="flex-grow rounded-md p-4 text-lg outline-none"
+              placeholder="Header"
+              required
+            />
+          </div>
+          <div className="flex gap-4">
+            <textarea
+              ref={inputRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="min-h-[200px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg outline-none"
+              placeholder="What's happening?"
+              required
+            />
+          </div>
+          <div className="flex gap-4">
+            <input
+              type="text"
+            accept="image/*"
+              value={imageUrl ?? ""}
+              onChange={(e) => setImageUrl(e.target.value || undefined)}
+              className="flex-grow rounded-md p-4 text-lg outline-none"
+              placeholder="Image URL (optional)"
+            />
+          </div>
+          <Button className="self-start">Publish</Button>
+        </form>
+      </div>
+    );
   }
-
-  return (
-    <div className="container mx-auto flex h-screen bg-gray-100">
-      <form
-        onSubmit={handleSubmit}
-        className="ml-20 mt-20 flex w-[800px] flex-col gap-2 border-b px-4 py-2"
-      >
-        <div className="flex gap-4">
-          <textarea
-            ref={inputRef}
-            style={{}}
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            className="min-h-[200px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg outline-none"
-            placeholder="What's happening?"
-          />
-        </div>
-        <Button className="self-start">Tweet</Button>
-      </form>
-    </div>
-  );
-}
+  

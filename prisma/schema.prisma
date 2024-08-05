@@ -32,7 +32,9 @@ model Tweet {
     userId    String
     content   String
     createdAt DateTime @default(now())
-    
+    header     String
+    imageUrl   String?
+
     user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     likes Like[]
 

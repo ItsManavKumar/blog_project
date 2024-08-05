@@ -1,6 +1,7 @@
 import React from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { ProfileImage } from './ProfileImage';
 
 interface NavLink {
   label: string;
@@ -11,9 +12,7 @@ const navLinks: NavLink[] = [];
 
 const Navbar: React.FC = () => {
   const { data: sessionData } = useSession();
-  const session = useSession()
-const user = session.data?.user
-
+  const user = sessionData?.user;
 
   return (
     <nav className="fixed w-full bg-white text-gray-900 px-20 py-2 flex justify-center border border-gray-200 shadow-sm">
@@ -40,7 +39,7 @@ const user = session.data?.user
           </li>
         </ul>
         <div className="flex items-center space-x-4">
-          {!sessionData && (
+          {!sessionData ? (
             <>
               <button
                 className="hidden lg:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 transition"
@@ -55,8 +54,7 @@ const user = session.data?.user
                 Create Account
               </button>
             </>
-          )}
-          {sessionData && (
+          ) : (
             <>
               <Link
                 href="/create"
@@ -70,13 +68,13 @@ const user = session.data?.user
               >
                 Sign out
               </button>
+              {user && (
+                <Link href={`/profiles/${user.id}`}>
+                  <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
+                </Link>
+              )}
             </>
           )}
-
-          {/* {user != null &&(
-          <Link href={`/profiles/${user.id}`}></Link>
-          
-        )} */}
         </div>
       </div>
     </nav>
