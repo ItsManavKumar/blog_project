@@ -1,0 +1,61 @@
+// pages/profiles/[id].tsx
+
+import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { getSession } from "next-auth/react";
+import { db } from "../../server/db";
+import { UserProfile } from "../../components/UserProfile";
+
+type UserProfileProps = {
+  user: {
+    id: string;
+    name: string;
+    image: string | null;
+  } | null;
+};
+
+const ProfilePage = ({ user }: UserProfileProps) => {
+  const router = useRouter();
+  const { id } = router.query;
+
+  if (!user) {
+    return <p>User not found</p>;
+  }
+
+  return (
+    <div className="">
+      <UserProfile user={user} />
+    </div>
+  );
+};
+
+export default ProfilePage;
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await getSession(context);
+  const { id } = context.params as { id: string };
+
+  if (!session) {
+    return {
+      redirect: {
+        destination: "/api/auth/signin",
+        permanent: false,
+      },
+    };
+  }
+
+  const user = await db.user.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      name: true,
+      image: true,
+    },
+  });
+
+  return {
+    props: {
+      user,
+    },
+  };
+};
