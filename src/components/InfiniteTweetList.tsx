@@ -56,7 +56,7 @@ export function InfiniteTweetList({
           />
         )}
         <div className="p-4">
-          <div className="flex items-center gap-2 ">
+          <div className="flex items-center gap-2 mb-2">
             <Link href={`/profiles/${user.id}`}>
               <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
             </Link>
@@ -74,7 +74,7 @@ export function InfiniteTweetList({
           </div>
           <div className="flex flex-col">
             <Link href={`../BlogPage`}><p className="text-xl font-bold">{header}</p></Link>
-            <p className="text-gray-700 text-md ">{content}</p>
+            <p className="text-gray-700 text-md py-2">{content}</p>
           </div>
         </div>
       </div>
