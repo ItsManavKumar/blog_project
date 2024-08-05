@@ -18,6 +18,10 @@ const config = {
     defaultLocale: "en",
   },
   transpilePackages: ["geist"],
+
+  images: {
+    domains: ['avatars.githubusercontent.com'],
+  },
 };
 
 export default config;

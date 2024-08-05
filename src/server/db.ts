@@ -18,4 +18,3 @@ if (env.NODE_ENV !== "production") globalForPrisma.prisma = db;
 
 
 // lib/prisma.ts
-

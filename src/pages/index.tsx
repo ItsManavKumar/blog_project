@@ -1,43 +1,39 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable react/jsx-no-undef */
 import React from "react";
 import Head from "next/head";
+import { api } from "~/utils/api";
 import Navbar from "../components/navbar";
 import Sidebar from "../components/sidebar";
-import Card from "~/components/card";
+// import Card from "~/components/card";
 import RightSection from "../components/rightSection";
-import Hunter from "../../public/hunter.jpg";
-import Onepiece from "../../public/onePiece.jpg";
-import LandScape from "../../public/landscape.webp";
-// import { InfiniteTweetList } from "~/components/InfiniteTweetList";
+import { InfiniteTweetList } from "~/components/InfiniteTweetList";
+
+function RecentBlogs() {
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isLoading,
+    isError,
+  } = api.tweet.infiniteFeed.useInfiniteQuery(
+    {},
+    {
+      getNextPageParam: (lastPage) => lastPage.nextCursor,
+    }
+  );
+
+  return (
+    <InfiniteTweetList
+      tweets={data?.pages.flatMap((page) => page.tweets) ?? []}
+      fetchNextPage={fetchNextPage}
+      hasMore={hasNextPage ?? false}
+      isLoading={isLoading}
+      isError={isError}
+    />
+  );
+}
 
 export default function Home() {
-  // Define RecentBlogs as a component
-  // function RecentBlogs() {
-  //   const {
-  //     data,
-  //     fetchNextPage,
-  //     hasNextPage,
-  //     isLoading,
-  //     isError,
-  //   } = api.tweet.infiniteFeed.useInfiniteQuery(
-  //     {},
-  //     {
-  //       getNextPageParam: (lastPage) => lastPage.nextCursor,
-  //     }
-  //   );
-
-  //   return (
-  //     <InfiniteTweetList
-  //       tweets={data?.pages.flatMap((page) => page.tweets) ?? []}
-  //       fetchNextPage={fetchNextPage}
-  //       hasMore={hasNextPage ?? false}
-  //       isLoading={isLoading}
-  //       isError={isError}
-  //     />
-  //   );
-  // }
-
   return (
     <>
       <Head>
@@ -48,58 +44,56 @@ export default function Home() {
       <Navbar />
 
       <main className="flex min-h-screen flex-col bg-gray-100 py-4 pt-20">
-        <div className="flex lg:justify-center">
-          <div className="flex lg:w-[calc(100%-160px)] gap-4">
-            <div
-              id="left"
-              className="sidebar-hidden flex-col text-gray-700 lg:block lg:w-1/6 min-w-[240px]"
-            >
-              <Sidebar />
-            </div>
+        <div className="flex lg:justify-center container mx-auto gap-4">
+          <div
+            id="left"
+            className="sidebar-hidden flex-col text-gray-700 lg:block lg:w-1/6 min-w-[240px]"
+          >
+            <Sidebar />
+          </div>
 
-            <div
-              id="middle"
-              className="flex min-w-[450px] max-w-[750px] flex-col gap-4"
-            >
-              <div className="flex gap-4">
-                <button className="rounded-md px-4 py-2 text-lg font-semibold text-black hover:bg-white hover:text-[#3b49df]">
-                  Relevant
-                </button>
-                <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
-                  Latest
-                </button>
-                <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
-                  Top
-                </button>
-              </div>
-              <Card
-                imageSrc={LandScape}
-                username="@Lord_Laxus"
-                title="Title - Hello Hello"
-                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-              />
-              <Card
-                imageSrc={Onepiece}
-                username="@GodFather69"
-                title="Title - Hello Hello"
-                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-              />
-              <Card
-                imageSrc={Hunter}
-                username="@Lord_Explosion_Murder"
-                title="Title - Hello Hello"
-                content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
-              />
+          <div
+            id="middle"
+            className="flex min-w-[450px] w-1/2 max-w-[750px] flex-col gap-4"
+          >
+            <div className="flex gap-4">
+              <button className="rounded-md px-4 py-2 text-lg font-semibold text-black hover:bg-white hover:text-[#3b49df]">
+                Relevant
+              </button>
+              <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
+                Latest
+              </button>
+              <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
+                Top
+              </button>
             </div>
+            <RecentBlogs />
+            {/* <Card
+              img="/landscape.webp"
+              username="@Lord_Laxus"
+              title="Title - Hello Hello"
+              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+            />
+            <Card
+              img="/onePiece.jpg"
+              username="@GodFather69"
+              title="Title - Hello Hello"
+              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+            />
+            <Card
+              imageSrc="/hunter.jpg"
+              username="@Lord_Explosion_Murder"
+              title="Title - Hello Hello"
+              content="Finally made this wohoo, just need to connect to backend. Check back soon for updates. Thank you for coming to my not so famous TED talk."
+            /> */}
+          </div>
 
-            <div
-              id="right"
-              className="hidden w-1/4 min-w-[350px] flex-col bg-gray-50 lg:flex"
-            >
-              {/* Render the RecentBlogs component here */}
-              {/* <RecentBlogs /> */}
-              <RightSection />
-            </div>
+          <div
+            id="right"
+            className="hidden w-1/4 min-w-[350px] flex-col bg-gray-50 lg:flex"
+          >
+            
+            <RightSection />
           </div>
         </div>
       </main>
