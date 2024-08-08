@@ -57,42 +57,42 @@ function Form() {
     }
   
     return (
-      <div className="container mx-auto flex h-screen bg-gray-100">
+      <div className=" flex h-screen bg-[#f5f5f5]">
         <form
           onSubmit={handleSubmit}
-          className="ml-20 mt-20 flex w-[800px] flex-col gap-2 border-b px-4 py-2"
+          className="ml-40 mt-[60px] flex w-[900px] flex-col gap-2 border-b px-4 absolute "
         >
-          <div className="flex gap-4">
-            <input
-              type="text"
-              value={header}
-              onChange={(e) => setHeader(e.target.value)}
-              className="flex-grow rounded-md p-4 text-lg outline-none"
-              placeholder="Header"
-              required
-            />
-          </div>
-          <div className="flex gap-4">
-            <textarea
-              ref={inputRef}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="min-h-[200px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg outline-none"
-              placeholder="What's happening?"
-              required
-            />
-          </div>
-          <div className="flex gap-4">
-            <input
+          <div className="flex gap-4 border-1 rounded-md flex-col bg-white">
+
+          <input
               type="text"
             accept="image/*"
               value={imageUrl ?? ""}
               onChange={(e) => setImageUrl(e.target.value || undefined)}
-              className="flex-grow rounded-md p-4 text-lg outline-none"
-              placeholder="Image URL (optional)"
+              className="w-[150px] rounded-md p-1 text-md border-2 relative top-16 text-center ml-20"
+              placeholder="Add Cover Image"
+            />
+            
+            <input
+              type="text"
+              value={header}
+              onChange={(e) => setHeader(e.target.value)}
+              className="flex h-[200px] rounded-md p-4 text-lg shadow-sm placeholder-big ml-16  text-bold"
+              placeholder="hi"
+              required
             />
           </div>
-          <Button className="self-start">Publish</Button>
+          <div className="flex bg-white">
+            <textarea
+              ref={inputRef}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
+              className="min-h-[400px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg shadow-sm ml-16"
+              placeholder="Write your post content here..."
+              required
+            />
+          </div>
+          <Button className="self-start bg-blue-700 rounded-md mt-4">Publish</Button>
         </form>
       </div>
     );

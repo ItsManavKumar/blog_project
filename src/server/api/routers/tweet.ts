@@ -1,8 +1,8 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-import { createTRPCRouter, protectedProcedure, publicProcedure } from "~/server/api/trpc";
+import {
+  createTRPCRouter,
+  protectedProcedure,
+  publicProcedure,
+} from "~/server/api/trpc";
 import { z } from "zod";
 import { type inferAsyncReturnType } from "@trpc/server";
 import { type createTRPCContext } from "~/server/api/trpc";
@@ -15,7 +15,7 @@ export const tweetRouter = createTRPCRouter({
         onlyFollowing: z.boolean().optional(),
         limit: z.number().optional(),
         cursor: z.object({ id: z.string(), createdAt: z.date() }).optional(),
-      })
+      }),
     )
     .query(async ({ input: { limit = 10, cursor }, ctx }) => {
       return await getInfiniteTweets({
@@ -27,11 +27,13 @@ export const tweetRouter = createTRPCRouter({
     }),
 
   create: protectedProcedure
-    .input(z.object({
-      header: z.string().min(1),
-      content: z.string().min(1),
-      imageUrl: z.string().url().optional(),
-    }))
+    .input(
+      z.object({
+        header: z.string().min(1),
+        content: z.string().min(1),
+        imageUrl: z.string().url().optional(),
+      }),
+    )
     .mutation(async ({ input: { imageUrl, header, content }, ctx }) => {
       if (!ctx.session?.user) {
         throw new Error("User is not authenticated");
@@ -46,6 +48,52 @@ export const tweetRouter = createTRPCRouter({
       });
     }),
 
+  createComment: protectedProcedure
+    .input(
+      z.object({
+        tweetId: z.string(),
+        content: z.string().min(1),
+      }),
+    )
+    .mutation(async ({ input: { tweetId, content }, ctx }) => {
+      if (!ctx.session?.user) {
+        throw new Error("User is not authenticated");
+      }
+      await ctx.db.comment.create({
+        data: {
+          content,
+          tweetId,
+          userId: ctx.session.user.id,
+        },
+      });
+    }),
+
+  getComments: publicProcedure
+    .input(z.object({ tweetId: z.string() }))
+    .query(async ({ input: { tweetId }, ctx }) => {
+      return await ctx.db.comment.findMany({
+        where: { tweetId },
+        include: { user: { select: { name: true, image: true } } },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
+
+  getTweetById: publicProcedure
+    .input(z.string())
+    .query(async ({ input: tweetId, ctx }) => {
+      return await ctx.db.tweet.findUnique({
+        where: { id: tweetId },
+        include: {
+          user: true,
+          comments: {
+            include: {
+              user: true,
+            },
+            orderBy: { createdAt: "desc" },
+          },
+        },
+      });
+    }),
   // Add other procedures here
 });
 
@@ -55,7 +103,7 @@ async function getInfiniteTweets({
   limit,
   cursor,
 }: {
-  whereClause?: Partial<Tweet>; // Adjust based on your database schema
+  whereClause?: Partial<Tweet>;
   limit: number;
   cursor: { id: string; createdAt: Date } | undefined;
   ctx: inferAsyncReturnType<typeof createTRPCContext>;
@@ -80,6 +128,15 @@ async function getInfiniteTweets({
       user: {
         select: { name: true, id: true, image: true },
       },
+      comments: {
+        where: { userId: currentUserId },
+        select: {
+          id: true,
+          content: true,
+          user: { select: { name: true, image: true } },
+        },
+        orderBy: { createdAt: "desc" },
+      },
     },
   });
 
@@ -101,6 +158,7 @@ async function getInfiniteTweets({
       likeCount: tweet._count.likes,
       user: tweet.user,
       likedByMe: tweet.likes.length > 0,
+      comments: tweet.comments, // Include comments here
     })),
     nextCursor,
   };

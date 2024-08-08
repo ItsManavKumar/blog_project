@@ -14,29 +14,17 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
-}
-
-
 model Tweet {
     id        String   @id @default(uuid())
     userId    String
     content   String
     createdAt DateTime @default(now())
-    header     String
-    imageUrl   String?
+    header    String
+    imageUrl  String?
 
-    user  User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-    likes Like[]
+    user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+    likes    Like[]
+    comments Comment[]
 
     @@unique([createdAt, id])
     @@index([userId])
@@ -53,6 +41,18 @@ model Like {
     @@index([tweetId])
 }
 
+model Comment {
+    id        String   @id @default(cuid())
+    content   String
+    createdAt DateTime @default(now())
+    tweetId   String
+    tweet     Tweet    @relation(fields: [tweetId], references: [id])
+    userId    String
+    user      User     @relation(fields: [userId], references: [id])
+
+    
+}
+
 // Necessary for Next auth
 model Account {
     id                       String  @id @default(cuid())
@@ -60,12 +60,12 @@ model Account {
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String?  @db.Text
-    access_token             String?  @db.Text
+    refresh_token            String? @db.Text
+    access_token             String? @db.Text
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String?  @db.Text
+    id_token                 String? @db.Text
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
     refresh_token_expires_in Int?
@@ -89,9 +89,9 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
     tweets        Tweet[]
-    likes          Like[]
+    likes         Like[]
+    comments      Comment[]
 }
 
 model VerificationToken {
@@ -102,14 +102,14 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
+// model Post {
+//     id        Int      @id @default(autoincrement())
+//     name      String
+//     createdAt DateTime @default(now())
+//     updatedAt DateTime @updatedAt
 
-model Blog {
-  id          Int      @id @default(autoincrement())
-  title       String
-  description String
-  body        String
-  coverImage  String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-}
+//     createdBy   User   @relation(fields: [createdById], references: [id])
+//     createdById String
 
+//     @@index([name])
+// }

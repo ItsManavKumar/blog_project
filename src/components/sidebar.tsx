@@ -18,7 +18,14 @@ import {
   ChatBubbleBottomCenterIcon
 } from "@heroicons/react/24/solid";
 
-const Sidebar = () => {
+interface SidebarProps {
+  onClose: () => void;
+}
+interface SidebarProps {
+  onClose: () => void;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({onClose}) => {
   return (
     <nav
       id="sidebar"

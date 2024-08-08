@@ -11,3 +11,10 @@
       display: none;
     }
   }
+  /* styles.css */
+.placeholder-big::placeholder {
+  font-size: 2.75rem; 
+  color: black;
+  font-weight: bold;
+  
+}

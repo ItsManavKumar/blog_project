@@ -49,7 +49,9 @@ export default function Home() {
             id="left"
             className="sidebar-hidden flex-col text-gray-700 lg:block lg:w-1/5 min-w-[240px]"
           >
-            <Sidebar />
+            <Sidebar onClose={function (): void {
+              throw new Error("Function not implemented.");
+            } } />
           </div>
 
           <div
