@@ -1,7 +1,5 @@
-import { FormEvent, useState } from "react";
 import Link from "next/link";
 import { ProfileImage } from "./ProfileImage";
-import { api } from "~/utils/api";
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/outline";
 import { FireIcon } from "@heroicons/react/24/solid";
 
@@ -62,23 +60,23 @@ export function InfiniteTweetList({
     createdAt,
     comments = [],
   }: Tweet) {
-    const [newComment, setNewComment] = useState("");
+    // const [newComment, setNewComment] = useState("");
 
-    const createComment = api.tweet.createComment.useMutation({
-      onSuccess: () => {
-        setNewComment("");
-      },
-    });
+    // const createComment = api.tweet.createComment.useMutation({
+    //   onSuccess: () => {
+    //     setNewComment("");
+    //   },
+    // });
 
-    const handleAddComment = (e: FormEvent) => {
-      e.preventDefault();
-      createComment.mutate({ tweetId: id, content: newComment });
-      console.log("Tweet ID:", id);
-      console.log("Comment Content:", newComment);
-    };
+    // const handleAddComment = (e: FormEvent) => {
+    //   e.preventDefault();
+    //   createComment.mutate({ tweetId: id, content: newComment });
+    //   console.log("Tweet ID:", id);
+    //   console.log("Comment Content:", newComment);
+    // };
 
     return (
-      <div className="mx-auto my-4 max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
+      <div className="mx-auto  max-w-4xl overflow-hidden rounded-lg bg-white shadow-lg">
         {imageUrl && (
           <img
             src={imageUrl}

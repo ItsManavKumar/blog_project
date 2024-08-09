@@ -11,7 +11,10 @@ import {
   SparklesIcon,
   BookOpenIcon,
   FaceSmileIcon,
-  ChatBubbleBottomCenterIcon
+  ChatBubbleBottomCenterIcon,
+  XMarkIcon,
+  HandThumbUpIcon,
+  EyeSlashIcon
 } from "@heroicons/react/24/solid";
 
 interface SidebarProps {
@@ -21,20 +24,29 @@ interface SidebarProps {
   onClose: () => void;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({onClose}) => {
+const ToggleSidebar: React.FC<SidebarProps> = ({onClose}) => {
   return (
     <nav
       id="sidebar"
-      className="flex flex-col overflow-hidden rounded-md" /*add border-lg and bg-yellow-500 before editing */
+      className="flex-col w-[330px] md:w-[300px] min-w-[330px] shadow-md rounded-md bg-white absolute lg:hidden md:hidden translate-transform duration-300" style={{zIndex: 1000}}
     >
-      <ul className="space-y-2">
+      <ul className="space-y-2 text-lg p-4">
+        <li><a
+            href="#"
+            className="w-full h-10 p-1 flex justify-between gap-2 hover:bg-blue-700/5 hover:underline rounded-md mb-6"
+          >
+            <span className="font-semibold text-xl">DEV Community</span>
+            <XMarkIcon className="h-6 w-6 text-black" onClick={onClose} />
+            
+          </a>
+        </li>
         <li>
           <a
             href="#home"
             className="w-full h-10 px-2 py-[16px] flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
           >
             <HomeIcon className="h-6 w-6 text-yellow-500" />
-            <span>Home</span>
+            <span className="">Home</span>
           </a>
         </li>
         <li>
@@ -145,9 +157,39 @@ const Sidebar: React.FC<SidebarProps> = ({onClose}) => {
             <span>Software comparisons</span>
           </a>
         </li>
+        <li>
+            <span className="text-black text-xl font-semibold px-4"> Other</span>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <HandThumbUpIcon className="h-6 w-6 text-yellow-400 " />
+            <span>Code of Conduct</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <FaceSmileIcon className="h-6 w-6 text-purple-600 " />
+            <span>Privacy Policy</span>
+          </a>
+        </li>
+        <li>
+          <a
+            href="#home"
+            className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
+          >
+            <EyeSlashIcon className="h-6 w-6 text-black " />
+            <span>Terms ofuse</span>
+          </a>
+        </li>
       </ul>
     </nav>
   );
 };
 
-export default Sidebar;
+export default ToggleSidebar;

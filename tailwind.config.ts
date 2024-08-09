@@ -13,7 +13,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-geist-sans)", ...fontFamily.sans],
+        sans: ['var(--ff-sans-serif)', 'sans-serif'],
       },
       colors: {
         customHover: 'rgb(47, 58, 158)',

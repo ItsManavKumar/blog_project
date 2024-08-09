@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { ProfileImage } from './ProfileImage';
-import Sidebar from './sidebar';
 import { Bars3Icon } from '@heroicons/react/24/solid';
+import ToggleSidebar from './toggleSidebar';
 
 interface NavLink {
   label: string;
@@ -26,9 +26,10 @@ const Navbar: React.FC = () => {
 
   return (
     <>
-    <nav className="fixed w-full bg-white text-gray-900 md:px-20 lg:px-20 sm:px-10 py-2 flex justify-center border border-gray-200 shadow-sm">
-      <div className="container lg:mx-auto flex items-center justify-between">
-        <div className="flex items-center">
+    <nav className="fixed w-full bg-white text-gray-900 md:px-0 sm:px-10 py-2 flex justify-center border border-gray-200 shadow-sm"
+    style={{ zIndex: 10 }}>
+      <div className="container lg:mx-auto flex items-center justify-between mx-3">
+        <div className="flex items-center ">
           <button onClick={toggleSidebar} className="lg:hidden md:hidden mr-2">
           <Bars3Icon className="h-8 w-8 text-gray-500" />
           </button>
@@ -49,9 +50,6 @@ const Navbar: React.FC = () => {
             </li>
           ))}
           <li>
-            {/* <Link href="/blogs" className="hover:text-gray-600">
-              Blogs
-            </Link> */}
           </li>
         </ul>
         <div className="flex items-center space-x-4">
@@ -74,7 +72,7 @@ const Navbar: React.FC = () => {
             <>
               <Link
                 href="/create"
-                className="hidden lg:block md:block bg-white/10 border-2 border-none text-md text-[#404040] px-4 py-1 rounded hover:bg-purple-200 transition"
+                className="hidden lg:block md:block border-2 border-[#3b49df]  border-lg text-md text-[#3b49df] px-4 py-1 rounded-md hover:bg-purple-200 transition"
               >
                 Create Post
               </Link>
@@ -95,7 +93,7 @@ const Navbar: React.FC = () => {
       </div>
       
     </nav>
-    {sidebarOpen && <Sidebar onClose={toggleSidebar} />}
+    {sidebarOpen && <ToggleSidebar onClose={toggleSidebar} />}
     </>
   );
 };

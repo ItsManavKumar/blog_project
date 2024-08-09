@@ -84,7 +84,14 @@ export const tweetRouter = createTRPCRouter({
       return await ctx.db.tweet.findUnique({
         where: { id: tweetId },
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              image: true,
+              bio: true, // Include bio here
+            },
+          },
           comments: {
             include: {
               user: true,
@@ -126,7 +133,7 @@ async function getInfiniteTweets({
         where: { userId: currentUserId },
       },
       user: {
-        select: { name: true, id: true, image: true },
+        select: { name: true, id: true, image: true, bio: true },
       },
       comments: {
         where: { userId: currentUserId },
