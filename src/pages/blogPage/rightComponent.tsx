@@ -22,7 +22,7 @@ export default function RightComponent() {
 
   return (
     <div
-              className="relative flex flex-col overflow-hidden rounded-md border-x border-b border-t border-gray-200 bg-white text-lg"
+              className="relative flex flex-col  overflow-hidden rounded-md border-x border-b border-t border-gray-200 bg-white text-lg "
               style={{ zIndex: 1 }}
             >
               <div className="flex h-[35px] bg-black"></div>

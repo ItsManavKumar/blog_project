@@ -1,19 +1,12 @@
 import { useSession } from "next-auth/react";
-import {
-  FormEvent,
-  useCallback,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
-import { api } from "~/utils/api"; // Ensure this import is correct
+import { FormEvent, useRef, useState } from "react";
+import { api } from "~/utils/api";
 import { Button } from "./Button";
+import dynamic from "next/dynamic";
+import "react-quill/dist/quill.snow.css"; // Import Quill styles
 
-function updateTextAreaSize(textArea?: HTMLTextAreaElement) {
-  if (textArea == null) return;
-  textArea.style.height = "0";
-  textArea.style.height = `${textArea.scrollHeight}px`;
-}
+
+const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 export function NewTweetForm() {
   const { data: session, status } = useSession();
@@ -22,79 +15,116 @@ export function NewTweetForm() {
   return <Form />;
 }
 
-function Form() {
-    const { data: session } = useSession();
-    const [header, setHeader] = useState("");
-    const [content, setContent] = useState("");
-    const [imageUrl, setImageUrl] = useState<string | undefined>(undefined); // Initialize as undefined
-    const textAreaRef = useRef<HTMLTextAreaElement>();
-    const inputRef = useCallback((textArea: HTMLTextAreaElement) => {
-      updateTextAreaSize(textArea);
-      textAreaRef.current = textArea;
-    }, []);
-  
-    useLayoutEffect(() => {
-      if (textAreaRef.current) {
-        updateTextAreaSize(textAreaRef.current);
-      }
-    }, [content]);
-  
-    const createTweet = api.tweet.create.useMutation({
-      onSuccess: (newTweet) => {
-        setHeader("");
-        setContent("");
-        setImageUrl(undefined); // Reset to undefined
-  
-        if (!session) return;
-  
-        // Adjust cache update or state logic as needed
-      },
-    });
-  
-    function handleSubmit(e: FormEvent) {
-      e.preventDefault();
-      createTweet.mutate({ header, content, imageUrl: imageUrl ?? undefined });
-    }
-  
-    return (
-      <div className=" flex h-screen bg-[#f5f5f5]">
-        <form
-          onSubmit={handleSubmit}
-          className="ml-40 mt-[60px] flex w-[900px] flex-col gap-2 border-b px-4 absolute "
-        >
-          <div className="flex gap-4 border-1 rounded-md flex-col bg-white">
 
-          <input
-              type="text"
-            accept="image/*"
-              value={imageUrl ?? ""}
-              onChange={(e) => setImageUrl(e.target.value || undefined)}
-              className="w-[150px] rounded-md p-1 text-md border-2 relative top-16 text-center ml-20"
-              placeholder="Add Cover Image"
-            />
-            
-            <input
-              type="text"
-              value={header}
-              onChange={(e) => setHeader(e.target.value)}
-              className="flex h-[200px] rounded-md p-4 text-lg shadow-sm placeholder-big ml-16  text-bold"
-              placeholder="hi"
-              required
-            />
-          </div>
-          <div className="flex bg-white">
-            <textarea
-              ref={inputRef}
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="min-h-[400px] flex-grow resize-none overflow-hidden rounded-md p-4 text-lg shadow-sm ml-16"
-              placeholder="Write your post content here..."
-              required
-            />
-          </div>
-          <Button className="self-start bg-blue-700 rounded-md mt-4">Publish</Button>
-        </form>
-      </div>
-    );
+function Form() {
+  const { data: session } = useSession();
+  const [header, setHeader] = useState("");
+  const [content, setContent] = useState(""); // Keep as HTML content
+  const [tags, setTags] = useState<string[]>([]);
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+
+  const createTweet = api.tweet.create.useMutation({
+    onSuccess: () => {
+      setHeader("");
+      setContent("");
+      setImageUrl(undefined);
+      setTags([]);
+    },
+  });
+
+  function handleTagInput(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Enter" && e.currentTarget.value.trim() !== "") {
+      e.preventDefault();
+      if (tags.length < 4) {
+        setTags([...tags, e.currentTarget.value.trim()]);
+        e.currentTarget.value = "";
+      }
+    }
   }
   
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    createTweet.mutate({
+      header,
+      content, // Use HTML content directly
+      imageUrl: imageUrl ?? undefined,
+      tags: tags.length > 0 ? tags.join(", ") : undefined,
+    });
+  }
+
+  return (
+    <div className="flex h-full min-h-screen bg-[#f5f5f5]">
+      <form
+        onSubmit={handleSubmit}
+        className="ml-36 pt-16 flex w-[900px] flex-1 flex-col px-4"
+      >
+        <div className="border-x flex flex-col rounded-t-md bg-white">
+          <input
+            type="text"
+            accept="image/*"
+            value={imageUrl ?? ""}
+            onChange={(e) => setImageUrl(e.target.value || undefined)}
+            className="text-md relative top-12 ml-20 mr-auto rounded-md border-2 p-1 text-center outline-none"
+            placeholder="Add Cover Image"
+          />
+          <textarea
+            value={header}
+            onChange={(e) => setHeader(e.target.value)}
+            className="placeholder-big text-bold header-big ml-16 mt-20 flex  p-1 text-lg outline-none placeholder:text-[#525252]"
+            placeholder="New post title here..."
+            required
+          />
+          <div className="mb-10 ml-16">
+            {tags.map((tag, index) => (
+              <span
+                key={index}
+                className="mr-2 mt-2 rounded bg-gray-100 px-2 py-1 text-blue-700"
+              >
+                {tag}
+              </span>
+            ))}
+            {tags.length < 4 && (
+              <input
+                type="text"
+                onKeyDown={handleTagInput}
+                className="text-bold flex rounded-md p-2 text-lg outline-none placeholder:text-base placeholder:text-[#525252]"
+                placeholder="Add up to 4 tags..."
+              />
+            )}
+          </div>
+        </div>
+        <div className="flex bg-white border-b border-x rounded-b-md">
+          <ReactQuill
+            theme="snow"
+            value={content}
+            onChange={setContent}
+            className="min-h-[400px] flex-grow overflow-hidden rounded-b-md text-xl outline-none break-words"
+            placeholder="Write your post content here..."
+          />
+        </div>
+        <Button className="mt-4 self-start rounded-md bg-blue-700">
+          Publish
+        </Button>
+      </form>
+      <div className="relative  w-[30%] flex-shrink-0 pt-56">
+        <span className="text-lg font-semibold">Tagging Guidelines</span>
+        <div className="p-2 mr-16 text-base text-[#525252] space-y-2">
+          <li className="list-inside">
+            Tags help people find your post - think of them as the topics or
+            categories that best describe your post.
+          </li>
+          <li>
+            Add up to four comma-separated tags per post. Use existing tags
+            whenever possible.
+          </li>
+          <li>
+            Some tags have special posting guidelines - double check to make sure
+            your post complies with them.
+          </li>
+        </div>
+      </div>
+    </div>
+  );
+}

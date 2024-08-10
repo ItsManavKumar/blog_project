@@ -25,7 +25,7 @@ model Tweet {
     user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
     likes    Like[]
     comments Comment[]
-
+    tags     String?
     @@unique([createdAt, id])
     @@index([userId])
 }
@@ -46,11 +46,9 @@ model Comment {
     content   String
     createdAt DateTime @default(now())
     tweetId   String
-    tweet     Tweet    @relation(fields: [tweetId], references: [id])
+    tweet     Tweet    @relation(fields: [tweetId], references: [id], onDelete: Cascade)
     userId    String
-    user      User     @relation(fields: [userId], references: [id])
-
-    
+    user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 // Necessary for Next auth

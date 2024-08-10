@@ -2,7 +2,7 @@ import React from "react";
 
 const rightSection = () => {
   return (
-    <div className="flex flex-col overflow-hidden rounded-md border-x border-t border-gray-200 ">
+    <div className="flex flex-col overflow-hidden rounded-lg border-x border-t border-gray-200 ">
       <div className="border-b border-gray-200 bg-white p-4 text-lg font-semibold">
         <p className="text-md">Active discussions</p>
       </div>

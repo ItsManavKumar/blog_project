@@ -32,9 +32,10 @@ export const tweetRouter = createTRPCRouter({
         header: z.string().min(1),
         content: z.string().min(1),
         imageUrl: z.string().url().optional(),
+        tags: z.string().optional(),
       }),
     )
-    .mutation(async ({ input: { imageUrl, header, content }, ctx }) => {
+    .mutation(async ({ input: { imageUrl, header, content, tags }, ctx }) => {
       if (!ctx.session?.user) {
         throw new Error("User is not authenticated");
       }
@@ -44,6 +45,7 @@ export const tweetRouter = createTRPCRouter({
           header,
           content,
           userId: ctx.session.user.id,
+          tags,
         },
       });
     }),
@@ -78,7 +80,7 @@ export const tweetRouter = createTRPCRouter({
       });
     }),
 
-  getTweetById: publicProcedure
+    getTweetById: publicProcedure
     .input(z.string())
     .query(async ({ input: tweetId, ctx }) => {
       return await ctx.db.tweet.findUnique({
@@ -89,7 +91,7 @@ export const tweetRouter = createTRPCRouter({
               id: true,
               name: true,
               image: true,
-              bio: true, // Include bio here
+              bio: true,
             },
           },
           comments: {
@@ -98,10 +100,49 @@ export const tweetRouter = createTRPCRouter({
             },
             orderBy: { createdAt: "desc" },
           },
+           // Include tags directly here
         },
       });
     }),
+    
+    getCommentsByUser: publicProcedure
+  .input(z.object({ userId: z.string() }))
+  .query(async ({ input: { userId }, ctx }) => {
+    return await ctx.db.comment.findMany({
+      where: { userId },
+      include: { user: { select: { name: true, image: true } } },
+      orderBy: { createdAt: "desc" },
+    });
+  }),
   // Add other procedures here
+  deleteTweet: protectedProcedure
+    .input(z.string()) // tweetId
+    .mutation(async ({ input: tweetId, ctx }) => {
+      if (!ctx.session?.user) {
+        throw new Error("User is not authenticated");
+      }
+
+      // Check if the tweet exists and if the user is the owner of the tweet
+      const tweet = await ctx.db.tweet.findUnique({
+        where: { id: tweetId },
+        select: { userId: true },
+      });
+
+      if (!tweet) {
+        throw new Error("Tweet not found");
+      }
+
+      if (tweet.userId !== ctx.session.user.id) {
+        throw new Error("You are not authorized to delete this tweet");
+      }
+
+      await ctx.db.tweet.delete({
+        where: { id: tweetId },
+      });
+
+      return { success: true };
+    }),
+
 });
 
 async function getInfiniteTweets({
@@ -128,6 +169,7 @@ async function getInfiniteTweets({
       header: true,
       content: true,
       createdAt: true,
+      tags: true,
       _count: { select: { likes: true } },
       likes: {
         where: { userId: currentUserId },
@@ -164,6 +206,7 @@ async function getInfiniteTweets({
       createdAt: tweet.createdAt,
       likeCount: tweet._count.likes,
       user: tweet.user,
+      tags: tweet.tags,
       likedByMe: tweet.likes.length > 0,
       comments: tweet.comments, // Include comments here
     })),

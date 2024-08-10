@@ -5,6 +5,7 @@ import { api } from "~/utils/api";
 import Sidebar from "../components/sidebar";
 import RightSection from "../components/rightSection";
 import { InfiniteTweetList } from "~/components/InfiniteTweetList";
+import Navbar from "~/components/navbar";
 
 function RecentBlogs() {
   const {
@@ -42,10 +43,10 @@ export default function Home() {
       
       <main className="flex">
       <div className="flex-grow pt-14 bg-[#f5f5f5]">
-        <div className="lg:container flex lg:mx-auto">
+        <div className="flex lg:mx-[80px]">
           <div
             id="left"
-            className="w-60 py-4 sidebar-hidden lg:block  min-w-[240px]"
+            className="w-60 mx-2 py-4 sidebar-hidden lg:block  min-w-[240px]"
           >
             <Sidebar onClose={function (): void {
               throw new Error("Function not implemented.");
@@ -54,7 +55,7 @@ export default function Home() {
 
           <div
             id="middle"
-            className="flex-grow py-4 mx-2 w-8/12 min-w-[450px]"
+            className="flex-grow py-4 mx-2 w-7/12 min-w-[350px]"
           >
             <div className="flex gap-4">
               <button className="rounded-md px-4 py-2 text-lg font-semibold text-black hover:bg-white hover:text-[#3b49df]">
@@ -73,7 +74,7 @@ export default function Home() {
 
           <div
             id="right"
-            className="w-96 py-4 mx-2 hidden lg:block min-w-[350px]"
+            className="w-96 py-4 mx-2 hidden lg:block min-w-[300px]"
           >
             
             <RightSection />
