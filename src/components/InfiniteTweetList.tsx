@@ -4,9 +4,7 @@ import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/outline";
 import { EllipsisHorizontalIcon, FireIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import TweetCardOptionsButton from "./tweetCardOptionsButton";
-import { api } from "~/utils/api";
-import CommentList from "./Comment";
-import { comment } from "postcss";
+
 
 type Comment = {
   id: string;

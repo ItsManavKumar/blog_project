@@ -73,7 +73,7 @@ function Form() {
           <textarea
             value={header}
             onChange={(e) => setHeader(e.target.value)}
-            className="placeholder-big text-bold header-big ml-16 mt-20 flex  p-1 text-lg outline-none placeholder:text-[#525252]"
+            className="placeholder-big text-bold header-big ml-16 mt-20 flex  p-1 text-lg outline-none placeholder:text-[#525252] mr-3 h-[80px]"
             placeholder="New post title here..."
             required
           />

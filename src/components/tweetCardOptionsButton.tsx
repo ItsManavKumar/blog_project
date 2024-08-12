@@ -2,7 +2,8 @@ import { EllipsisHorizontalIcon } from "@heroicons/react/24/solid";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
 import { useEffect, useRef, useState } from "react";
-import { api } from "~/utils/api"; // Adjust import based on your project structure
+import { api } from "~/utils/api";
+import { Dialog, DialogPanel } from '@tremor/react';
 
 type TweetCardOptionsButtonProps = {
   tweetId: string;
@@ -12,17 +13,21 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data: session } = useSession(); // Fetch session data
-
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  
   // Fetch tweet data to get the author's ID
   const { data: tweet } = api.tweet.getTweetById.useQuery(tweetId);
 
   const deleteTweet = api.tweet.deleteTweet.useMutation({
     onSuccess: async () => {
-      alert('Tweet deleted successfully');
+      setError("Post Deleted Successfully!");
       await queryClient.invalidateQueries(); // Adjust the query key based on your setup
     },
-    onError: () => {
-      alert('Failed to delete tweet');
+    onError: (err) => {
+      console.error("Failed to delete post:", err);
+      setError("Failed to delete post.");
     },
   });
 
@@ -32,9 +37,9 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
 
   const copyToClipboard = (url: string) => {
     navigator.clipboard.writeText(url).then(() => {
-      alert('Link copied to clipboard!');
+      setError('Link copied to clipboard!');
     }, (err) => {
-      alert('Failed to copy link');
+      setError('Failed to copy link');
     });
   };
 
@@ -86,6 +91,12 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
                 Delete
               </li>
             )}
+            {error && <p className="text-green-600 mx-2 text-sm">{error}</p>}
+            <Dialog open={Boolean(error)} onClose={() => setError(null)}>
+    <DialogPanel className="bg-red-100 text-red-600 p-4 rounded-md">
+      {error}
+    </DialogPanel>
+  </Dialog>
           </ul>
         </div>
       )}

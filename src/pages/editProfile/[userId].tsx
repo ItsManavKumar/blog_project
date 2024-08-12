@@ -1,11 +1,12 @@
 import { useState, useEffect, FormEvent } from "react";
 import { api } from "~/utils/api";
 import { useSession } from "next-auth/react";
+import { Dialog, DialogPanel } from '@tremor/react';
+
 import {
   BookmarkIcon,
   ChatBubbleLeftRightIcon,
   FaceSmileIcon,
-  HeartIcon,
 } from "@heroicons/react/24/solid";
 
 export default function EditProfile() {
@@ -27,13 +28,14 @@ export default function EditProfile() {
 
   const mutation = api.userProfile.updateProfile.useMutation({
     onSuccess: () => {
-      alert("Profile updated successfully!");
+      setError("Profile updated successfully!"); // Set a success message
     },
     onError: (err) => {
       console.error("Failed to update profile:", err);
-      setError("Failed to update profile.");
+      setError("Failed to update profile."); // Set an error message
     },
   });
+  
 
   useEffect(() => {
     if (user) {
@@ -115,7 +117,7 @@ export default function EditProfile() {
         <form onSubmit={handleSubmit} className="">
           
         <div>
-              <h1 className="p-1 text-3xl">{user?.name}</h1>
+              <h1 className="p-1 mb-2 text-3xl">{user?.name}</h1>
             </div>
           
           
@@ -189,9 +191,17 @@ export default function EditProfile() {
           >
             Save Changes
           </button>
-          {error && <p className="text-red-600">{error}</p>}
+          {error && <p className="text-green-600">{error}</p>}
           </div>
         </form>
+        {error && (
+  <Dialog open={Boolean(error)} onClose={() => setError(null)}>
+    <DialogPanel className="bg-red-100 text-red-600 p-4 rounded-md">
+      {error}
+    </DialogPanel>
+  </Dialog>
+)}
+
       </div>
     </div>
   );

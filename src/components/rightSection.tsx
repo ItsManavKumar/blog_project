@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 import { api } from "~/utils/api";
 
@@ -25,8 +26,10 @@ function RecentUserPosts() {
       </div>
       {posts.map((post) => (
         <div key={post.id} className="border-b border-gray-200 bg-white p-4 text-md ">
+          <Link href={`/blogPage/${post.id}`}>
           <p className="text-md text-[#414b5a]">{post.header}</p>
           <p className="text-sm text-[#525252]">{post.comments?.length || 0} comments</p>
+          </Link>
         </div>
       ))}
     </div>
