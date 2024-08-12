@@ -50,22 +50,23 @@ function Form() {
       header,
       content, // Use HTML content directly
       imageUrl: imageUrl ?? undefined,
-      tags: tags.length > 0 ? tags.join(", ") : undefined,
+      tags: tags.length > 0 ? tags.join(" ") : undefined,
     });
   }
 
   return (
+    <div className="min-h-max flex bg-[#f5f5f5]">
     <div className="flex h-full min-h-screen bg-[#f5f5f5]">
       <form
         onSubmit={handleSubmit}
-        className="ml-36 pt-16 flex w-[900px] flex-1 flex-col px-4"
+        className="lg:ml-36 pt-16 flex w-[900px] flex-1 flex-col px-4 "
       >
         <div className="border-x flex flex-col rounded-t-md bg-white">
           <input
             type="text"
             accept="image/*"
             value={imageUrl ?? ""}
-            onChange={(e) => setImageUrl(e.target.value || undefined)}
+            onChange={(e) => setImageUrl(e.target.value ?? undefined)}
             className="text-md relative top-12 ml-20 mr-auto rounded-md border-2 p-1 text-center outline-none"
             placeholder="Add Cover Image"
           />
@@ -108,7 +109,7 @@ function Form() {
           Publish
         </Button>
       </form>
-      <div className="relative  w-[30%] flex-shrink-0 pt-56">
+      <div className="relative  w-[30%] flex-shrink-0 pt-56 hidden lg:block ">
         <span className="text-lg font-semibold">Tagging Guidelines</span>
         <div className="p-2 mr-16 text-base text-[#525252] space-y-2">
           <li className="list-inside">
@@ -125,6 +126,7 @@ function Form() {
           </li>
         </div>
       </div>
+    </div>
     </div>
   );
 }

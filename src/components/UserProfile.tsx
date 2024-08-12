@@ -4,6 +4,7 @@ import { ProfileImage } from "./ProfileImage";
 import { useSession } from "next-auth/react";
 import { InfiniteTweetList } from "./InfiniteTweetList";
 import { ChatBubbleLeftIcon, HashtagIcon, PencilSquareIcon } from "@heroicons/react/24/outline";
+import Link from "next/link";
 
 type UserProfileProps = {
   user: {
@@ -76,24 +77,26 @@ export const UserProfile = ({ user }: UserProfileProps) => {
   return (
     <div className="flex min-h-screen bg-[#f5f5f5]">
       <div className="relative w-full flex-grow">
-        <div className="h-[250px] bg-black"></div>
-        <div className="container absolute left-1/2 top-36 mx-auto w-full max-w-5xl -translate-x-1/2 transform rounded-md bg-white p-4 shadow-sm sm:px-8 lg:px-16">
+        <div className="h-[250px] bg-black mb-32"></div>
+       
+        <div className=" absolute left-1/2 top-36  w-full max-w-5xl -translate-x-1/2 transform rounded-md bg-white p-4 shadow-sm sm:px-8 lg:px-16">
           <ProfileImage
             src={user.image}
             className="absolute top-[-60px] mx-auto h-24 w-24 rounded-full border-[6px] border-black sm:top-[-80px] sm:h-32 sm:w-32 sm:border-[10px]"
           />
-          <button className="absolute right-4 top-4 rounded-md bg-[#3b49df] p-2 text-white sm:right-6">
-            Edit Profile
-          </button>
-          <h1 className="mt-[20px] text-center text-xl font-bold sm:mt-[-40px] sm:text-2xl">
+         <Link href={`/editProfile/${user.id}`}>
+            <button className="absolute right-4 top-4 rounded-md bg-[#3b49df] p-2 text-white sm:right-6">
+              Edit Profile
+            </button>
+          </Link>
+          <h1 className=" text-center text-xl font-bold  sm:text-2xl md:top-[-40px]">
             {user.name}
           </h1>
           <h2 className="mb-4 mt-4 flex justify-center text-center text-sm sm:mb-10 sm:text-base">
             {user.bio ?? "404 bio not found"}
           </h2>
         </div>
-
-        <div className="flex mt-[140px] mx-auto max-w-5xl gap-4 ">
+        <div className="flex  mx-auto max-w-5xl gap-4 pt-[70px] ">
           {/* Left Section (Profile Stats) */}
           <ul className="w-[340px] h-[170px] flex-shrink-0 flex-col space-y-2 rounded-md bg-white p-2 shadow-sm text-gray-600 text-base sidebar-hidden">
             <li>
@@ -126,7 +129,7 @@ export const UserProfile = ({ user }: UserProfileProps) => {
           </ul>
 
           {/* Right Section (RecentUserPosts) */}
-          <div className="flex-grow p-0">
+          <div className="flex-grow">
             <RecentUserPosts userId={user.id} />
           </div>
         </div>

@@ -53,7 +53,7 @@ export default function Blogs() {
   });
 
   return (
-    <div className="flex min-h-screen gap-4 bg-[#f5f5f5] px-4 py-8 pt-[74px] lg:flex-row lg:px-16">
+    <div className="flex min-h-screen gap-4 bg-[#f5f5f5] px-4 py-8 pt-[74px] lg:flex-row lg:px-16 justify-center">
       <div
         id="left"
         className="sidebar-hidden ml-8 flex justify-end py-4 pt-10 text-gray-700"
@@ -62,9 +62,9 @@ export default function Blogs() {
       </div>
 
       <div
-        id="middle"
-        className="h-full min-w-[600px] flex-grow rounded-md border border-gray-200 bg-white shadow-sm lg:max-w-[850px]"
-      >
+  id="middle"
+  className="h-full w-full flex-grow rounded-md border border-gray-200 bg-white shadow-sm lg:max-w-[850px] overflow-hidden"
+>
         <div className="border-b">
           {tweet.imageUrl && (
             <img
@@ -75,7 +75,7 @@ export default function Blogs() {
               height={300}
             />
           )}
-          <div className="space-y-8 px-16 py-8">
+          <div className="space-y-8 px-16 py-16">
             <div className="mb-2 flex items-center gap-2">
               <Link href={`/profiles/${tweet.user.id}`}>
                 <ProfileImage
@@ -97,7 +97,7 @@ export default function Blogs() {
             <div className="flex flex-col space-y-8">
               <h1 className="break-words text-5xl font-bold">{tweet.header}</h1>
               <div
-                className="white-space-pre py-2 text-xl text-gray-700"
+                className="white-space-pre py-2 text-xl text-[#171717] break-words"
                 dangerouslySetInnerHTML={{ __html: tweet.content }}
               />
             </div>

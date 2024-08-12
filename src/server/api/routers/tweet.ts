@@ -80,7 +80,7 @@ export const tweetRouter = createTRPCRouter({
       });
     }),
 
-    getTweetById: publicProcedure
+  getTweetById: publicProcedure
     .input(z.string())
     .query(async ({ input: tweetId, ctx }) => {
       return await ctx.db.tweet.findUnique({
@@ -92,6 +92,7 @@ export const tweetRouter = createTRPCRouter({
               name: true,
               image: true,
               bio: true,
+              location: true,
             },
           },
           comments: {
@@ -100,20 +101,66 @@ export const tweetRouter = createTRPCRouter({
             },
             orderBy: { createdAt: "desc" },
           },
-           // Include tags directly here
         },
       });
     }),
-    
-    getCommentsByUser: publicProcedure
-  .input(z.object({ userId: z.string() }))
-  .query(async ({ input: { userId }, ctx }) => {
-    return await ctx.db.comment.findMany({
-      where: { userId },
-      include: { user: { select: { name: true, image: true } } },
-      orderBy: { createdAt: "desc" },
-    });
-  }),
+
+  getCommentsByUser: publicProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ input: { userId }, ctx }) => {
+      return await ctx.db.comment.findMany({
+        where: { userId },
+        include: { user: { select: { name: true, image: true } } },
+        orderBy: { createdAt: "desc" },
+      });
+    }),
+
+    // addReaction: protectedProcedure
+    // .input(
+    //   z.object({
+    //     tweetId: z.string(),
+    //   })
+    // )
+    // .mutation(async ({ input: { tweetId }, ctx }) => {
+    //   if (!ctx.session?.user) {
+    //     throw new Error("User is not authenticated");
+    //   }
+
+    //   const userId = ctx.session.user.id;
+
+    //   // Check if the user has already reacted (liked) to this tweet
+    //   const existingReaction = await ctx.db.like.findUnique({
+    //     where: {
+    //       tweetId_userId: {
+    //         tweetId,
+    //         userId,
+    //       },
+    //     },
+    //   });
+
+    //   if (existingReaction) {
+    //     // If reaction exists, remove it
+    //     await ctx.db.like.delete({
+    //       where: {
+    //         tweetId_userId: {
+    //           tweetId,
+    //           userId,
+    //         },
+    //       },
+    //     });
+    //   } else {
+    //     // If no reaction, add it
+    //     await ctx.db.like.create({
+    //       data: {
+    //         tweetId,
+    //         userId,
+    //       },
+    //     });
+    //   }
+
+    //   return { success: true };
+    // }),
+
   // Add other procedures here
   deleteTweet: protectedProcedure
     .input(z.string()) // tweetId
@@ -142,7 +189,6 @@ export const tweetRouter = createTRPCRouter({
 
       return { success: true };
     }),
-
 });
 
 async function getInfiniteTweets({

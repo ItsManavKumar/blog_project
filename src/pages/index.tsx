@@ -6,6 +6,7 @@ import Sidebar from "../components/sidebar";
 import RightSection from "../components/rightSection";
 import { InfiniteTweetList } from "~/components/InfiniteTweetList";
 import Navbar from "~/components/navbar";
+import DEVChallengesCard from "~/components/DEVChallengesCard";
 
 function RecentBlogs() {
   const {
@@ -41,7 +42,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <main className="flex">
+      <main className="flex min-h-screen">
       <div className="flex-grow pt-14 bg-[#f5f5f5]">
         <div className="flex lg:mx-[80px]">
           <div
@@ -67,6 +68,9 @@ export default function Home() {
               <button className="rounded-md px-4 py-2 text-lg text-[#404040] hover:bg-white hover:text-[#3b49df]">
                 Top
               </button>
+            </div>
+            <div className="flex justify-center mx-auto">
+            <DEVChallengesCard/>
             </div>
             <RecentBlogs />
            

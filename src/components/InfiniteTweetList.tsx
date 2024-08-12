@@ -5,6 +5,8 @@ import { EllipsisHorizontalIcon, FireIcon } from "@heroicons/react/24/solid";
 import { useState } from "react";
 import TweetCardOptionsButton from "./tweetCardOptionsButton";
 import { api } from "~/utils/api";
+import CommentList from "./Comment";
+import { comment } from "postcss";
 
 type Comment = {
   id: string;
@@ -21,6 +23,8 @@ type Tweet = {
   user: { id: string; image: string | null; name: string | null };
   comments?: Comment[];
   tags?: string | null;
+  likedByMe: boolean;
+  likes?: string | null;
 };
 
 type InfiniteTweetListProps = {
@@ -38,6 +42,8 @@ export function InfiniteTweetList({
   fetchNextPage,
   hasMore,
 }: InfiniteTweetListProps) {
+  
+
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <h1>Error...</h1>;
 
@@ -51,12 +57,11 @@ export function InfiniteTweetList({
     day: "2-digit",
     month: "short",
   });
+
   const commentDateFormatter = new Intl.DateTimeFormat(undefined, {
     day: "2-digit",
     month: "short",
   });
-
-  
 
   function TweetCard({
     id,
@@ -65,15 +70,25 @@ export function InfiniteTweetList({
     createdAt,
     tags,
     comments = [],
+    likedByMe,
   }: Tweet) {
-
     const [userCommentsCount, setUserCommentsCount] = useState(comments.length);
 
+    // const addReactionMutation = api.tweet.addReaction.useMutation();
+
+    // const toggleReaction = async () => {
+    //   try {
+    //     await addReactionMutation.mutateAsync({ tweetId: id });
+
+    //   } catch (error) {
+    //     console.error("Failed to toggle reaction", error);
+    //   }
+    // };
 
     return (
-      <div className="mx-auto  max-w-4xl overflow-hidden rounded-lg  shadow-lg bg-white">
+      <div className="mx-auto max-w-4xl overflow-hidden rounded-md border border:bg-gray-600 bg-white">
         <div className="p-4">
-          <div className="mb-2 flex items-center gap-2">
+          <div className=" flex items-center gap-2">
             <Link href={`/profiles/${user.id}`}>
               <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
             </Link>
@@ -88,34 +103,79 @@ export function InfiniteTweetList({
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
-            <TweetCardOptionsButton tweetId={id}/>
+            <TweetCardOptionsButton tweetId={id} />
           </div>
-          <div className="flex flex-col  mx-[40px]">
+          <div className="mx-[40px] mt-3 flex flex-col">
             <Link href={`/blogPage/${id}`}>
-              <p className="text-2xl font-semibold hover:text-[#3b49df] break-words">{header}</p>
+              <p className="break-words text-2xl font-semibold hover:text-[#3b49df]">
+                {header}
+              </p>
             </Link>
-           
           </div>
+          <div className="mb-2 mt-2 px-12 text-sm text-[#414b5a]">
+  {tags?.split(",").map((tag, index) => (
+    <span key={index} className="mr-3">
+      {tag}
+    </span>
+  ))}
+</div>
 
-     
+
           <div className="">
-            
-            <div className="flex gap-2 flex-row ml-[30px]">
-              <Link
-                href={`/blogPage/${id}`}
-                className="flex h-10 items-center gap-2 rounded-md px-2 hover:bg-blue-700/5 hover:underline"
+            <div className="ml-[30px] flex flex-row gap-2 ">
+              <button
+                // onClick={() => toggleReaction()}
+                className={`flex h-10 items-center gap-2 rounded-md px-2 ${likedByMe ? "bg-blue-700 text-white" : "hover:bg-[#f5f5f5]"}`}
               >
-                <FireIcon className="h-4 w-4 text-red-500" />
-                <span>Reactions</span>
-              </Link>
+                <FireIcon className="h-4 w-4" />
+                <span>{likedByMe ? "Liked" : "Like"}</span>
+              </button>
               <Link
                 href={`/blogPage/${id}`}
-                className="flex h-10 items-center gap-2 rounded-md px-2 hover:bg-blue-700/5 hover:underline"
+                className="flex h-10 items-center gap-2 rounded-md px-2 hover:bg-[#f5f5f5] "
               >
                 <ChatBubbleBottomCenterIcon className="h-4 w-4 text-black" />
-                <span>{userCommentsCount === 0 ? "Add Comment" : `${userCommentsCount} Comment${userCommentsCount > 1 ? "s" : ""}`}</span>
-                <span>{tags}</span>
+                <span>
+                  {userCommentsCount === 0
+                    ? "Add Comment"
+                    : `${userCommentsCount} Comment${userCommentsCount > 1 ? "s" : ""}`}
+                </span>
               </Link>
+            </div>
+
+            <div className="mx-1 mt-4 mb-4">
+              <div>
+                <ul className="space-y-2">
+                  {comments.slice(0, 2).map((comment) => (
+                    <li key={comment.id} className="pt-2">
+                      <div className="flex gap-2">
+                        {comment.user.image && (
+                          <ProfileImage
+                            src={comment.user.image}
+                            className="h-6 w-6 rounded-full"
+                          />
+                        )}
+
+                        <div className="flex-grow space-y-2 rounded-md bg-[#f5f5f5] p-4">
+                          <p className="text-md text-gray-800">
+                            {comment.user.name}
+                            <span className="mx-2 text-xs text-gray-500">
+                              {commentDateFormatter.format(new Date())}
+                            </span>
+                          </p>
+
+                          <p className="text-gray-800">{comment.content}</p>
+                        </div>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+                {comments.length > 1 && (
+                  <Link href={`/blogPage/${id}`}>
+                  <div className="text-sm ml-[30px] mt-8 mb-3 text-gray-500">See all {comments.length} commments</div>
+                  </Link>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -124,7 +184,7 @@ export function InfiniteTweetList({
   }
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-[7px]">
       {tweets.map((tweet) => (
         <TweetCard key={tweet.id} {...tweet} />
       ))}

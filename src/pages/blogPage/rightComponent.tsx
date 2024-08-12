@@ -15,7 +15,6 @@ export default function RightComponent() {
     isLoading,
     isError,
   } = api.tweet.getTweetById.useQuery(id as string ?? null);
- 
 
   if (isLoading) return <p>Loading...</p>;
   if (isError || !tweet) return <h1>Error loading post...</h1>;
@@ -33,9 +32,11 @@ export default function RightComponent() {
                 />
                 <div className="text-md ml-4 font-bold">{tweet.user.name}</div>
               </div>
-              <Button className="mx-4 mb-4 rounded-md bg-[#3b49df]">
-                Follow
+              <Link href={`/profiles/${tweet.user.id}`} className="block mx-4">
+              <Button className=" mb-4 rounded-md bg-[#3b49df] w-full ">
+                View Profile
               </Button>
+              </Link>
               <div className="flex flex-col space-y-4 p-5">
                 <p className="text-base text-gray-500">
                   {tweet.user.bio ?? "404 bio not found"}
@@ -44,7 +45,7 @@ export default function RightComponent() {
                   <p className="text-xs font-semibold text-gray-600">
                     LOCATION
                   </p>
-                  <p className="text-base text-gray-500">Sydney, Australia</p>
+                  <p className="text-base text-gray-500">{tweet.user.location}</p>
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-gray-600">WORK</p>
@@ -56,6 +57,7 @@ export default function RightComponent() {
                 </div>
               </div>
             </div>
+
   )
 }
 

@@ -1,28 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { ProfileImage } from './ProfileImage';
 import { Bars3Icon } from '@heroicons/react/24/solid';
 import ToggleSidebar from './toggleSidebar';
+import SearchBar from './SearchBar';
+import { Tweet } from '@prisma/client';
+import { api } from '~/utils/api';
 
 interface NavLink {
   label: string;
   href: string;
 }
 
-
 const navLinks: NavLink[] = [];
 
-const Navbar: React.FC = () => {
+const Navbar: React.FC= () => {
   const { data: sessionData } = useSession();
   const user = sessionData?.user;
 
-
   const [sidebarOpen, setSidebarOpen] = useState(false);
-
-    const toggleSidebar = () => {
+  const toggleSidebar = () => {
       setSidebarOpen(!sidebarOpen);
     };
+
+
 
   return (
     <>
@@ -30,7 +32,7 @@ const Navbar: React.FC = () => {
   className="fixed w-full text-gray-900 py-2 flex border border-gray-200 shadow-sm bg-white"
   style={{ zIndex: 10 }}
 >
-  <div className="w-full px-[80px] flex items-center justify-between">
+  <div className="w-full lg:px-[80px] flex items-center justify-between px-[20px]">
     <div className="flex items-center">
       <button onClick={toggleSidebar} className="lg:hidden mr-2">
         <Bars3Icon className="h-8 w-8 text-gray-500" />
@@ -42,6 +44,9 @@ const Navbar: React.FC = () => {
           alt="Logo"
         />
       </Link>
+      <div className="">
+    <SearchBar/>
+      </div>
     </div>
     <ul className="hidden lg:flex space-x-4">
       {navLinks.map((link) => (
@@ -56,7 +61,7 @@ const Navbar: React.FC = () => {
       {!sessionData ? (
         <>
           <button
-            className="hidden lg:block bg-white/10 text-base text-[#404040] px-4 py-1 rounded hover:bg-purple-200 transition"
+            className="hidden lg:block bg-white/10 text-lg text-[#404040] px-4 py-1.5 rounded hover:bg-purple-200 transition"
             onClick={() => void signIn()}
           >
             Log In

@@ -31,35 +31,7 @@ const ProfilePage = ({ user }: UserProfileProps) => {
 
 export default ProfilePage;
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const session = await getSession(context);
-//   const { id } = context.params as { id: string };
 
-//   if (!session) {
-//     return {
-//       redirect: {
-//         destination: "/api/auth/signin",
-//         permanent: false,
-//       },
-//     };
-//   }
-
-//   const user = await db.user.findUnique({
-//     where: { id },
-//     select: {
-//       id: true,
-//       name: true,
-//       image: true,
-//       bio: true,
-//     },
-//   });
-
-//   return {
-//     props: {
-//       user,
-//     },
-//   };
-// };
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const { id } = context.params as { id: string };
 

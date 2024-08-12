@@ -26,6 +26,7 @@ model Tweet {
     likes    Like[]
     comments Comment[]
     tags     String?
+
     @@unique([createdAt, id])
     @@index([userId])
 }
@@ -35,10 +36,7 @@ model Like {
     tweetId String
     user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
     Tweet   Tweet  @relation(fields: [tweetId], references: [id], onDelete: Cascade)
-
-    @@id([userId, tweetId])
-    @@index([userId])
-    @@index([tweetId])
+    @@unique([tweetId, userId])
 }
 
 model Comment {
@@ -86,12 +84,13 @@ model User {
     emailVerified DateTime?
     image         String?
     bio           String?
+    location      String?
+    website       String?
     accounts      Account[]
     sessions      Session[]
     tweets        Tweet[]
     likes         Like[]
     comments      Comment[]
-    
 }
 
 model VerificationToken {
