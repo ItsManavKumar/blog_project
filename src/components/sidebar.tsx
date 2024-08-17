@@ -141,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({onClose}) => {
             href="#home"
             className="w-full h-10 px-2 flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
           >
-            <FaceSmileIcon className="h-6 w-6 text-yellow-400 " />
+            <SparklesIcon className="h-6 w-6 text-yellow-400 " />
             <span>Software comparisons</span>
           </a>
         </li>

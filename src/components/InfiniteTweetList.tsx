@@ -93,11 +93,11 @@ export function InfiniteTweetList({
             <div className="flex flex-col">
               <Link
                 href={`/profiles/${user.id}`}
-                className="text-sm text-gray-700 hover:underline"
+                className="lg:text-sm text-xl text-gray-700 hover:underline"
               >
                 {user.name}
               </Link>
-              <span className="text-xs text-gray-500">
+              <span className="lg:text-xs text-md text-gray-500 text-md">
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
@@ -105,12 +105,12 @@ export function InfiniteTweetList({
           </div>
           <div className="mx-[40px] mt-3 flex flex-col">
             <Link href={`/blogPage/${id}`}>
-              <p className="break-words text-2xl font-semibold hover:text-[#3b49df]">
+              <p className="break-words lg:text-2xl text-3xl font-semibold hover:text-[#3b49df]">
                 {header}
               </p>
             </Link>
           </div>
-          <div className="mb-2 mt-2 px-12 text-sm text-[#414b5a]">
+          <div className="mb-2 mt-2 px-12 lg:text-sm text-lg text-[#414b5a]">
   {tags?.split(",").map((tag, index) => (
     <span key={index} className="mr-3">
       {tag}

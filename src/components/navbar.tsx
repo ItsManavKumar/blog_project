@@ -89,7 +89,7 @@ const Navbar: React.FC= () => {
           </button>
           {user && (
             <Link href={`/profiles/${user.id}`}>
-              <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
+              <ProfileImage src={user.image} className="h-[45px] w-[45px] rounded-full" />
             </Link>
           )}
         </>

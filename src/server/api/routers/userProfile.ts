@@ -24,6 +24,7 @@ export const userProfileRouter = createTRPCRouter({
       email: z.string().email().optional(),
       bio: z.string().optional(),
       location: z.string().optional(),
+      image: z.string().optional(),
     }))
     .mutation(async ({ input, ctx }) => {
       const userId = ctx.session?.user.id;
@@ -38,6 +39,7 @@ export const userProfileRouter = createTRPCRouter({
           email: input.email,
           bio: input.bio,
           location: input.location,
+          image: input.image,
         },
       });
 

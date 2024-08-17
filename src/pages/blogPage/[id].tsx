@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { ProfileImage } from "~/components/ProfileImage";
@@ -53,7 +54,7 @@ export default function Blogs() {
   });
 
   return (
-    <div className="flex min-h-screen gap-4 bg-[#f5f5f5] px-4 py-8 pt-[74px] lg:flex-row lg:px-16 justify-center">
+    <div className="flex min-h-screen gap-4 bg-[#f5f5f5]  py-8 pt-[74px] lg:flex-row lg:px-16 justify-center">
       <div
         id="left"
         className="sidebar-hidden ml-8 flex justify-end py-4 pt-10 text-gray-700"
@@ -72,10 +73,10 @@ export default function Blogs() {
               alt="Tweet Image"
               className="h-[400px] w-full rounded-t-md object-cover"
               width={800}
-              height={300}
+              height={400}
             />
           )}
-          <div className="space-y-8 px-16 py-16">
+          <div className="space-y-8 lg:px-16 px-4 py-16">
             <div className="mb-2 flex items-center gap-2">
               <Link href={`/profiles/${tweet.user.id}`}>
                 <ProfileImage
@@ -95,9 +96,9 @@ export default function Blogs() {
               </div>
             </div>
             <div className="flex flex-col space-y-8">
-              <h1 className="break-words text-5xl font-bold">{tweet.header}</h1>
+              <h1 className="break-words text-4xl font-bold lg:text-5xl">{tweet.header}</h1>
               <div
-                className="white-space-pre py-2 text-xl text-[#171717] break-words"
+                className="white-space-pre py-2 text-lg lg:text-xl text-[#171717] break-words"
                 dangerouslySetInnerHTML={{ __html: tweet.content }}
               />
             </div>
