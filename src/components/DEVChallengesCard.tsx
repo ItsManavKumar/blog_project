@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import React from "react";
 import landscape from "../../public/hunter.jpg";
 import Image from "next/image";

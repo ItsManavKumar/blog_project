@@ -28,7 +28,7 @@ const ToggleSidebar: React.FC<SidebarProps> = ({onClose}) => {
   return (
     <nav
       id="sidebar"
-      className="flex-col w-[330px] md:w-[300px] min-w-[330px] shadow-md rounded-md bg-white absolute lg:hidden md:hidden translate-transform duration-300" style={{zIndex: 1000}}
+      className="flex-col w-[330px] md:w-[300px] min-w-[330px] shadow-md rounded-md bg-white fixed lg:hidden md:hidden translate-transform duration-300" style={{zIndex: 1000}}
     >
       <ul className="space-y-2 text-lg p-4">
         <li><a

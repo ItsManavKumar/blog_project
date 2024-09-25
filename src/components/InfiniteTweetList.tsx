@@ -1,10 +1,7 @@
 import Link from "next/link";
 import { ProfileImage } from "./ProfileImage";
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/outline";
-import { EllipsisHorizontalIcon, FireIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
-import TweetCardOptionsButton from "./tweetCardOptionsButton";
-
+import { FireIcon } from "@heroicons/react/24/solid";
 
 type Comment = {
   id: string;
@@ -40,7 +37,6 @@ export function InfiniteTweetList({
   fetchNextPage,
   hasMore,
 }: InfiniteTweetListProps) {
-  
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <h1>Error...</h1>;
@@ -70,18 +66,6 @@ export function InfiniteTweetList({
     comments = [],
     likedByMe,
   }: Tweet) {
-    const [userCommentsCount, setUserCommentsCount] = useState(comments.length);
-
-    // const addReactionMutation = api.tweet.addReaction.useMutation();
-
-    // const toggleReaction = async () => {
-    //   try {
-    //     await addReactionMutation.mutateAsync({ tweetId: id });
-
-    //   } catch (error) {
-    //     console.error("Failed to toggle reaction", error);
-    //   }
-    // };
 
     return (
       <div className="mx-auto max-w-4xl overflow-hidden rounded-md border border:bg-gray-600 bg-white">
@@ -101,7 +85,6 @@ export function InfiniteTweetList({
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
-            <TweetCardOptionsButton tweetId={id} />
           </div>
           <div className="mx-[40px] mt-3 flex flex-col">
             <Link href={`/blogPage/${id}`}>
@@ -111,14 +94,12 @@ export function InfiniteTweetList({
             </Link>
           </div>
           <div className="mb-2 mt-2 px-12 lg:text-sm text-lg text-[#414b5a]">
-  {tags?.split(",").map((tag, index) => (
-    <span key={index} className="mr-3">
-      {tag}
-    </span>
-  ))}
-</div>
-
-
+            {tags?.split(",").map((tag, index) => (
+              <span key={index} className="mr-3">
+                {tag}
+              </span>
+            ))}
+          </div>
           <div className="">
             <div className="ml-[30px] flex flex-row gap-2 ">
               <button
@@ -134,13 +115,12 @@ export function InfiniteTweetList({
               >
                 <ChatBubbleBottomCenterIcon className="h-4 w-4 text-black" />
                 <span>
-                  {userCommentsCount === 0
+                  {comments.length === 0
                     ? "Add Comment"
-                    : `${userCommentsCount} Comment${userCommentsCount > 1 ? "s" : ""}`}
+                    : `${comments.length} Comment${comments.length > 1 ? "s" : ""}`}
                 </span>
               </Link>
             </div>
-
             <div className="mx-1 mt-4 mb-4">
               <div>
                 <ul className="space-y-2">
@@ -153,7 +133,6 @@ export function InfiniteTweetList({
                             className="h-6 w-6 rounded-full"
                           />
                         )}
-
                         <div className="flex-grow space-y-2 rounded-md bg-[#f5f5f5] p-4">
                           <p className="text-md text-gray-800">
                             {comment.user.name}
@@ -161,16 +140,15 @@ export function InfiniteTweetList({
                               {commentDateFormatter.format(new Date())}
                             </span>
                           </p>
-
                           <p className="text-gray-800">{comment.content}</p>
                         </div>
                       </div>
                     </li>
                   ))}
                 </ul>
-                {comments.length > 1 && (
+                {comments.length > 2 && (
                   <Link href={`/blogPage/${id}`}>
-                  <div className="text-sm ml-[30px] mt-8 mb-3 text-gray-500">See all {comments.length} commments</div>
+                    <div className="text-sm ml-[30px] mt-8 mb-3 text-gray-500">See all {comments.length} comments</div>
                   </Link>
                 )}
               </div>

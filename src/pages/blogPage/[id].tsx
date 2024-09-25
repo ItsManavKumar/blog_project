@@ -105,7 +105,7 @@ export default function Blogs() {
           </div>
         </div>
 
-        <div className="mt-4 px-16 py-8">
+        <div className="mt-4 px-4 py-8  md:px-16 lg:px-16 xl:px-16">
           <h3 className="text-2xl font-semibold text-[#525252]">
             Top Comments
           </h3>
