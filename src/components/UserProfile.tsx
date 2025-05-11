@@ -22,6 +22,7 @@ function RecentUserPosts({ userId }: { userId: string }) {
     hasNextPage,
     isLoading,
     isError,
+    isFetchingNextPage,
   } = api.tweet.infiniteFeed.useInfiniteQuery(
     {},
     {
@@ -34,12 +35,14 @@ function RecentUserPosts({ userId }: { userId: string }) {
 
   return (
     <InfiniteTweetList
-      tweets={userTweets}
-      fetchNextPage={fetchNextPage}
-      hasMore={hasNextPage ?? false}
-      isLoading={isLoading}
-      isError={isError}
-    />
+  tweets={userTweets}
+  fetchNextPage={fetchNextPage}
+  hasMore={hasNextPage ?? false}
+  isLoading={isLoading}
+  isError={isError}
+  isFetchingNextPage={isFetchingNextPage}
+/>
+
   );
 }
 

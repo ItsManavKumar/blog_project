@@ -28,8 +28,7 @@ function RecentBlogs() {
       fetchNextPage={fetchNextPage}
       hasMore={hasNextPage ?? false}
       isLoading={isLoading}
-      isError={isError}
-    />
+      isError={isError} isFetchingNextPage={false}    />
   );
 }
 

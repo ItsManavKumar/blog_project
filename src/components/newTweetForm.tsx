@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-imports */
 import { useSession } from "next-auth/react";
 import { FormEvent, useRef, useState } from "react";
 import { api } from "~/utils/api";

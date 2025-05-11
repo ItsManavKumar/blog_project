@@ -15,6 +15,7 @@ function RecentBlogs() {
     hasNextPage,
     isLoading,
     isError,
+    isFetchingNextPage,
   } = api.tweet.infiniteFeed.useInfiniteQuery(
     {},
     {
@@ -29,6 +30,7 @@ function RecentBlogs() {
       hasMore={hasNextPage ?? false}
       isLoading={isLoading}
       isError={isError}
+      isFetchingNextPage={isFetchingNextPage}
     />
   );
 }

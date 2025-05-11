@@ -1,7 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { useInView } from 'react-intersection-observer'; //implementing the infinite scroll functionality
+import { useEffect } from 'react';
 import Link from "next/link";
 import { ProfileImage } from "./ProfileImage";
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/outline";
 import { FireIcon } from "@heroicons/react/24/solid";
+import TweetCardOptionsButton from './tweetCardOptionsButton';
 
 type Comment = {
   id: string;
@@ -27,6 +31,7 @@ type InfiniteTweetListProps = {
   isError: boolean;
   hasMore: boolean;
   fetchNextPage: () => void;
+  isFetchingNextPage: boolean;
   tweets: Tweet[];
 };
 
@@ -35,26 +40,33 @@ export function InfiniteTweetList({
   isError,
   isLoading,
   fetchNextPage,
+  isFetchingNextPage,
   hasMore,
 }: InfiniteTweetListProps) {
+  const { ref, inView } = useInView();
 
+  useEffect(() => {
+    if (inView && hasMore) {
+      fetchNextPage();
+    }
+  }, [inView, hasMore, fetchNextPage]);
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <h1>Error...</h1>;
-
   if (tweets.length === 0) {
+    
     return (
       <h2 className="my-4 text-center text-2xl text-gray-500">No Tweets</h2>
     );
   }
 
-  const dateTimeFormatter = new Intl.DateTimeFormat(undefined, {
-    day: "2-digit",
+  const dateTimeFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
+    day: "2-digit",
   });
 
-  const commentDateFormatter = new Intl.DateTimeFormat(undefined, {
-    day: "2-digit",
+  const commentDateFormatter = new Intl.DateTimeFormat("en-US", {
     month: "short",
+    day: "2-digit",
   });
 
   function TweetCard({
@@ -66,8 +78,8 @@ export function InfiniteTweetList({
     comments = [],
     likedByMe,
   }: Tweet) {
-
     return (
+      
       <div className="mx-auto max-w-4xl overflow-hidden rounded-md border border:bg-gray-600 bg-white">
         <div className="p-4">
           <div className=" flex items-center gap-2">
@@ -85,6 +97,10 @@ export function InfiniteTweetList({
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
+            <span className="ml-auto ">
+            <TweetCardOptionsButton tweetId={id} authorId={user.id}/>
+            </span>
+
           </div>
           <div className="mx-[40px] mt-3 flex flex-col">
             <Link href={`/blogPage/${id}`}>
@@ -101,7 +117,7 @@ export function InfiniteTweetList({
             ))}
           </div>
           <div className="">
-            <div className="ml-[30px] flex flex-row gap-2 ">
+            <div className="ml-[30px] flex flex-row gap-2">
               <button
                 // onClick={() => toggleReaction()}
                 className={`flex h-10 items-center gap-2 rounded-md px-2 ${likedByMe ? "bg-blue-700 text-white" : "hover:bg-[#f5f5f5]"}`}
@@ -161,17 +177,19 @@ export function InfiniteTweetList({
 
   return (
     <div className="space-y-[7px]">
-      {tweets.map((tweet) => (
-        <TweetCard key={tweet.id} {...tweet} />
-      ))}
-      {hasMore && !isLoading && (
-        <button
-          onClick={fetchNextPage}
-          className="mx-auto my-4 block rounded border px-4 py-2"
-        >
-          Load More
-        </button>
-      )}
-    </div>
+    {tweets.map((tweet) => (
+      <TweetCard key={tweet.id} {...tweet} />
+    ))}
+  
+    {hasMore && (
+      <div ref={ref} className="h-10" /> // 👈 sentinel for scroll detection
+    )}
+    
+  
+    {isFetchingNextPage && (
+      <p className="text-center text-gray-500">Loading more...</p>
+    )}
+  </div>
+  
   );
 }

@@ -7,18 +7,19 @@ import { Dialog, DialogPanel } from '@tremor/react';
 
 type TweetCardOptionsButtonProps = {
   tweetId: string;
+  authorId: string;
 };
 
-const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
+const TweetCardOptionsButton = ({ tweetId, authorId }: TweetCardOptionsButtonProps) => {
+  
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const queryClient = useQueryClient();
   const { data: session } = useSession(); // Fetch session data
   const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const [confirmOpen, setConfirmOpen] = useState(false);
+  // const [confirmOpen, setConfirmOpen] = useState(false);
   
   // Fetch tweet data to get the author's ID
-  const { data: tweet } = api.tweet.getTweetById.useQuery(tweetId);
+  // const { data: tweet } = api.tweet.getTweetById.useQuery(tweetId);
 
   const deleteTweet = api.tweet.deleteTweet.useMutation({
     onSuccess: async () => {
@@ -38,7 +39,7 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
   const copyToClipboard = (url: string) => {
     navigator.clipboard.writeText(url).then(() => {
       setError('Link copied to clipboard!');
-    }, (err) => {
+    }, (_err) => {
       setError('Failed to copy link');
     });
   };
@@ -53,6 +54,7 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
       deleteTweet.mutate(tweetId);
     }
   };
+
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -61,20 +63,22 @@ const TweetCardOptionsButton = ({ tweetId }: TweetCardOptionsButtonProps) => {
     };
   
     document.addEventListener('mousedown', handleClickOutside);
+    
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
   // Ensure the "Delete" button only appears if the current user is the author of the tweet
-  const canDelete = session?.user?.id === tweet?.user.id;
+  const canDelete = session?.user?.id === authorId;
+
   const dropdownRef = useRef<HTMLDivElement>(null);
   return (
-    <div className="relative ml-auto">
+    <div className="relative ml-2">
       <button className="" onClick={toggleDropdown}>
         <EllipsisHorizontalIcon className="text-black h-6" />
       </button>
       {isDropdownOpen && (
-        <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-300 rounded" ref={dropdownRef}>
+        <div className="absolute mt-2 w-48 bg-white border border-gray-300 rounded" ref={dropdownRef}>
           <ul>
             <li
               className="px-4 py-2 hover:bg-gray-100 cursor-pointer"

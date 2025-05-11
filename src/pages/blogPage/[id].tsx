@@ -2,13 +2,13 @@
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { ProfileImage } from "~/components/ProfileImage";
-import { useState, FormEvent } from "react";
+import { useState,type FormEvent } from "react";
 import CommentList from "~/components/Comment";
 import Icons from "./icons";
 import Link from "next/link";
 import { useQueryClient } from "@tanstack/react-query";
 import { useSession } from "next-auth/react";
-import RightComponent from "./rightComponent";
+import RightComponent from "../../components/rightComponent";
 
 export default function Blogs() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function Blogs() {
         id="left"
         className="sidebar-hidden ml-8 flex justify-end py-4 pt-10 text-gray-700"
       >
-        <Icons tweetId={tweet.id} />
+        <Icons tweetId={tweet.id} authorId={tweet.user.id}/>
       </div>
 
       <div
@@ -147,7 +147,7 @@ export default function Blogs() {
       </div>
 
       <div id="right" className="hidden min-w-[250px] lg:block lg:w-[380px]">
-        <RightComponent />
+        <RightComponent tweet={tweet} />
       </div>
     </div>
   );

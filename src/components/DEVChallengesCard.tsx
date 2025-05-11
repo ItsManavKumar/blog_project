@@ -58,7 +58,7 @@ const DEVChallengesCard = () => {
 
 
       <div className="mx-6 text-gray-600">
-      Happy coding ❤️
+      Happy coding ❤️ Ps- if you see this, know that i worked hard Manav.
       </div>
     </div>
   );
