@@ -115,51 +115,51 @@ export const tweetRouter = createTRPCRouter({
       });
     }),
 
-    // addReaction: protectedProcedure
-    // .input(
-    //   z.object({
-    //     tweetId: z.string(),
-    //   })
-    // )
-    // .mutation(async ({ input: { tweetId }, ctx }) => {
-    //   if (!ctx.session?.user) {
-    //     throw new Error("User is not authenticated");
-    //   }
+  // addReaction: protectedProcedure
+  // .input(
+  //   z.object({
+  //     tweetId: z.string(),
+  //   })
+  // )
+  // .mutation(async ({ input: { tweetId }, ctx }) => {
+  //   if (!ctx.session?.user) {
+  //     throw new Error("User is not authenticated");
+  //   }
 
-    //   const userId = ctx.session.user.id;
+  //   const userId = ctx.session.user.id;
 
-    //   // Check if the user has already reacted (liked) to this tweet
-    //   const existingReaction = await ctx.db.like.findUnique({
-    //     where: {
-    //       tweetId_userId: {
-    //         tweetId,
-    //         userId,
-    //       },
-    //     },
-    //   });
+  //   // Check if the user has already reacted (liked) to this tweet
+  //   const existingReaction = await ctx.db.like.findUnique({
+  //     where: {
+  //       tweetId_userId: {
+  //         tweetId,
+  //         userId,
+  //       },
+  //     },
+  //   });
 
-    //   if (existingReaction) {
-    //     // If reaction exists, remove it
-    //     await ctx.db.like.delete({
-    //       where: {
-    //         tweetId_userId: {
-    //           tweetId,
-    //           userId,
-    //         },
-    //       },
-    //     });
-    //   } else {
-    //     // If no reaction, add it
-    //     await ctx.db.like.create({
-    //       data: {
-    //         tweetId,
-    //         userId,
-    //       },
-    //     });
-    //   }
+  //   if (existingReaction) {
+  //     // If reaction exists, remove it
+  //     await ctx.db.like.delete({
+  //       where: {
+  //         tweetId_userId: {
+  //           tweetId,
+  //           userId,
+  //         },
+  //       },
+  //     });
+  //   } else {
+  //     // If no reaction, add it
+  //     await ctx.db.like.create({
+  //       data: {
+  //         tweetId,
+  //         userId,
+  //       },
+  //     });
+  //   }
 
-    //   return { success: true };
-    // }),
+  //   return { success: true };
+  // }),
 
   // Add other procedures here
   deleteTweet: protectedProcedure
@@ -188,6 +188,25 @@ export const tweetRouter = createTRPCRouter({
       });
 
       return { success: true };
+    }),
+  //search functionality implementation
+
+  search: publicProcedure
+    .input(z.object({ query: z.string().min(1) }))
+    .query(async ({ input: { query }, ctx }) => {
+      return await ctx.db.tweet.findMany({
+        where: {
+          OR: [
+            { header: { contains: query, mode: "insensitive" } },
+            { content: { contains: query, mode: "insensitive" } },
+          ],
+        },
+        take: 5,
+        orderBy: { createdAt: "desc" },
+        include: {
+          user: { select: { id: true, name: true, image: true } },
+        },
+      });
     }),
 });
 

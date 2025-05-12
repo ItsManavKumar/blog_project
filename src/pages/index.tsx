@@ -5,7 +5,6 @@ import { api } from "~/utils/api";
 import Sidebar from "../components/sidebar";
 import RightSection from "../components/rightSection";
 import { InfiniteTweetList } from "~/components/InfiniteTweetList";
-import Navbar from "~/components/navbar";
 import DEVChallengesCard from "~/components/DEVChallengesCard";
 
 function RecentBlogs() {
@@ -58,7 +57,7 @@ export default function Home() {
 
           <div
             id="middle"
-            className="flex-grow py-4 mx-2 sm:mx-0 w-7/12 min-w-[300px]"
+            className="flex-grow py-4 mx-0 sm:mx-2 w-7/12 min-w-[300px]"
           >
             <div className="flex gap-4">
               <button className="rounded-md px-4 py-2 text-lg font-semibold text-black hover:bg-white hover:text-[#3b49df]">
@@ -72,7 +71,7 @@ export default function Home() {
               </button>
             </div>
             <div className="flex justify-center mx-auto">
-            <DEVChallengesCard/>
+            {/* <DEVChallengesCard/> */}
             </div>
             <RecentBlogs />
            

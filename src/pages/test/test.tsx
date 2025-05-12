@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import React from "react";
 
 export default function TestPage() {
@@ -39,6 +40,8 @@ export default function TestPage() {
           💻 Visible on medium+ screens
         </p>
       </div>
+    
+
     </div>
   );
 }

@@ -81,19 +81,19 @@ export function InfiniteTweetList({
     return (
       
       <div className="mx-auto max-w-4xl overflow-hidden rounded-md border border:bg-gray-600 bg-white">
-        <div className="p-4">
-          <div className=" flex items-center gap-2">
+        <div className="lg:p-4 md:p-4 pt-6 px-3">
+          <div className=" flex items-center gap-1 md:gap-2 lg:gap-2">
             <Link href={`/profiles/${user.id}`}>
               <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
             </Link>
             <div className="flex flex-col">
               <Link
                 href={`/profiles/${user.id}`}
-                className="lg:text-sm text-xl text-gray-700 hover:underline"
+                className="lg:text-sm text-sm  text-gray-700 hover:underline"
               >
                 {user.name}
               </Link>
-              <span className="lg:text-xs text-md text-gray-500 text-md">
+              <span className="lg:text-xs text-xs text-gray-500 text-md">
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
@@ -102,9 +102,9 @@ export function InfiniteTweetList({
             </span>
 
           </div>
-          <div className="mx-[40px] mt-3 flex flex-col">
+          <div className="md:mx-[40px] mt-3 flex flex-col mx-1">
             <Link href={`/blogPage/${id}`}>
-              <p className="break-words lg:text-2xl text-3xl font-semibold hover:text-[#3b49df]">
+              <p className="break-words lg:text-2xl text-xl font-semibold hover:text-[#3b49df]">
                 {header}
               </p>
             </Link>
@@ -117,7 +117,7 @@ export function InfiniteTweetList({
             ))}
           </div>
           <div className="">
-            <div className="ml-[30px] flex flex-row gap-2">
+            <div className="lg:ml-[30px] md:ml-[30px] flex flex-row gap-2 text-sm">
               <button
                 // onClick={() => toggleReaction()}
                 className={`flex h-10 items-center gap-2 rounded-md px-2 ${likedByMe ? "bg-blue-700 text-white" : "hover:bg-[#f5f5f5]"}`}
@@ -127,7 +127,7 @@ export function InfiniteTweetList({
               </button>
               <Link
                 href={`/blogPage/${id}`}
-                className="flex h-10 items-center gap-2 rounded-md px-2 hover:bg-[#f5f5f5] "
+                className="flex h-10 items-center gap-2 rounded-md px-[80px] md:px-2 lg:px-2 hover:bg-[#f5f5f5] "
               >
                 <ChatBubbleBottomCenterIcon className="h-4 w-4 text-black" />
                 <span>
