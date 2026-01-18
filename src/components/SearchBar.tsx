@@ -41,12 +41,8 @@ export default function SearchBar() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // const stripHtml = (html: string) => {
-  //   return html.replace(/<[^>]+>/g, "");
-  // };
-
   return (
-    <div ref={wrapperRef} className="relative mx-auto w-full sm:px-6 md:px-8 lg:px-0 max-w-3xl lg:w-[600px] md:w-[400px]">
+    <div ref={wrapperRef} className="relative w-full min-w-0">
       <input
         type="text"
         value={query}
@@ -56,23 +52,22 @@ export default function SearchBar() {
           setIsOpen(value.trim().length > 0);
         }}
         placeholder="Search Anything :)"
-        className="w-full rounded border border-gray-300 px-3 py-2 shadow-sm outline-[#3b49df]"
+        className="w-full min-w-0 rounded border border-gray-300 px-3 py-2 shadow-sm outline-[#3b49df]"
       />
 
       {isOpen && (
-        <div className="absolute left-0 right-0 z-10  max-h-96 overflow-y-auto rounded bg-white shadow-lg">
+        <div className="absolute left-0 right-0 z-20 mt-2 max-h-96 overflow-y-auto rounded bg-white shadow-lg">
           {isLoading && <p className="p-3">Searching...</p>}
-          {!isLoading && results?.length === 0 && <p className="p-3">No results found.</p>}
+          {!isLoading && results?.length === 0 && (
+            <p className="p-3">No results found.</p>
+          )}
 
           <ul>
             {results?.map((tweet) => (
-              <li
-                key={tweet.id}
-                className=""
-              >
+              <li key={tweet.id}>
                 <Link
                   href={`/blogPage/${tweet.id}`}
-                  className="block text-sm text-black rounded p-3 hover:bg-[#f5f5f5] outline-[#f5f5f5] border-[#f5f5f5]"
+                  className="block rounded p-3 text-sm text-black hover:bg-[#f5f5f5]"
                   onClick={() => setIsOpen(false)}
                 >
                   <div className="flex items-center justify-between text-sm text-gray-600">

@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({onClose}) => {
       className="flex flex-col overflow-hidden rounded-md" /*add border-lg and bg-yellow-500 before editing */
     >
       <ul className="space-y-2">
-        <li>
+        <li >
           <a
             href="#home"
             className="w-full h-10 px-2 py-[16px] flex items-center gap-2 hover:bg-blue-700/5 hover:underline rounded-md"
