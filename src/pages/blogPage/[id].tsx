@@ -2,7 +2,7 @@
 import { useRouter } from "next/router";
 import { api } from "~/utils/api";
 import { ProfileImage } from "~/components/ProfileImage";
-import { useState,type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import CommentList from "~/components/Comment";
 import Icons from "./icons";
 import Link from "next/link";
@@ -23,7 +23,7 @@ export default function Blogs() {
 
   const [newComment, setNewComment] = useState("");
   const [postComment, setToggleComment] = useState(false);
-  
+
   const queryClient = useQueryClient();
 
   const createComment = api.tweet.createComment.useMutation({
@@ -54,29 +54,31 @@ export default function Blogs() {
   });
 
   return (
-    <div className="flex min-h-screen gap-4 bg-[#f5f5f5]  py-8 pt-[74px] lg:flex-row lg:px-16 justify-center">
+    <div className="flex min-h-screen justify-center gap-4 bg-[#f5f5f5] py-8 pt-[74px] lg:flex-row lg:px-16">
       <div
         id="left"
         className="sidebar-hidden ml-8 flex justify-end py-4 pt-10 text-gray-700"
       >
-        <Icons tweetId={tweet.id} authorId={tweet.user.id}/>
+        <Icons tweetId={tweet.id} authorId={tweet.user.id} />
       </div>
 
       <div
-  id="middle"
-  className="h-full w-full flex-grow rounded-md border border-gray-200 bg-white shadow-sm lg:max-w-[850px] overflow-hidden"
->
+        id="middle"
+        className="h-full w-full flex-grow overflow-hidden rounded-md border border-gray-200 bg-white shadow-sm lg:max-w-[850px]"
+      >
         <div className="border-b">
           {tweet.imageUrl && (
-            <img
-              src={tweet.imageUrl}
-              alt="Tweet Image"
-              className="h-[400px] w-full rounded-t-md object-cover"
-              width={800}
-              height={400}
-            />
+            <div className="mt-3 overflow-hidden rounded-md">
+              <img
+                src={tweet.imageUrl}
+                alt="Cover"
+                className="h-52 w-full object-cover"
+                loading="lazy"
+              />
+            </div>
           )}
-          <div className="space-y-8 lg:px-16 px-4 py-16">
+
+          <div className="space-y-8 px-4 py-16 lg:px-16">
             <div className="mb-2 flex items-center gap-2">
               <Link href={`/profiles/${tweet.user.id}`}>
                 <ProfileImage
@@ -96,16 +98,35 @@ export default function Blogs() {
               </div>
             </div>
             <div className="flex flex-col space-y-8">
-              <h1 className="break-words text-4xl font-bold lg:text-5xl">{tweet.header}</h1>
+              <h1 className="break-words text-4xl font-bold lg:text-5xl">
+                {tweet.header}
+              </h1>
+              {tweet.tags && tweet.tags.trim().length > 0 && (
+                <div className="-mt-4 flex flex-wrap gap-2">
+                  {tweet.tags
+                    .split(/\s+/) // because you save "tag1 tag2 tag3"
+                    .filter(Boolean)
+                    .map((tag) => (
+                      <Link
+                        key={tag}
+                        href={`/search?tag=${encodeURIComponent(tag)}`}
+                        className="rounded-full bg-gray-100 px-3 py-1 text-sm font-medium text-[#3b49df] hover:bg-gray-200"
+                      >
+                        #{tag}
+                      </Link>
+                    ))}
+                </div>
+              )}
+
               <div
-                className="white-space-pre py-2 text-lg lg:text-xl text-[#171717] break-words"
+                className="white-space-pre break-words py-2 text-lg text-[#171717] lg:text-xl"
                 dangerouslySetInnerHTML={{ __html: tweet.content }}
               />
             </div>
           </div>
         </div>
 
-        <div className="mt-4 px-4 py-8  md:px-16 lg:px-16 xl:px-16">
+        <div className="mt-4 px-4 py-8 md:px-16 lg:px-16 xl:px-16">
           <h3 className="text-2xl font-semibold text-[#525252]">
             Top Comments
           </h3>

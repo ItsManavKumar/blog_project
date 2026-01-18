@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { useInView } from 'react-intersection-observer'; //implementing the infinite scroll functionality
-import { useEffect } from 'react';
+import { useInView } from "react-intersection-observer"; //implementing the infinite scroll functionality
+import { useEffect } from "react";
 import Link from "next/link";
 import { ProfileImage } from "./ProfileImage";
 import { ChatBubbleBottomCenterIcon } from "@heroicons/react/24/outline";
 import { FireIcon } from "@heroicons/react/24/solid";
-import TweetCardOptionsButton from './tweetCardOptionsButton';
+import TweetCardOptionsButton from "./tweetCardOptionsButton";
 
 type Comment = {
   id: string;
@@ -53,7 +53,6 @@ export function InfiniteTweetList({
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <h1>Error...</h1>;
   if (tweets.length === 0) {
-    
     return (
       <h2 className="my-4 text-center text-2xl text-gray-500">No Tweets</h2>
     );
@@ -79,45 +78,52 @@ export function InfiniteTweetList({
     likedByMe,
   }: Tweet) {
     return (
-      
-      <div className="mx-auto max-w-4xl overflow-hidden rounded-md border border:bg-gray-600 bg-white">
-        <div className="lg:p-4 md:p-4 pt-6 px-3">
-          <div className=" flex items-center gap-1 md:gap-2 lg:gap-2">
+      <div className="border:bg-gray-600 mx-auto max-w-4xl rounded-md border bg-white">
+        <div className="px-3 pt-6 md:p-4 lg:p-4">
+          <div className="flex items-center gap-1 md:gap-2 lg:gap-2">
             <Link href={`/profiles/${user.id}`}>
               <ProfileImage src={user.image} className="h-8 w-8 rounded-full" />
             </Link>
             <div className="flex flex-col">
               <Link
                 href={`/profiles/${user.id}`}
-                className="lg:text-sm text-sm  text-gray-700 hover:underline"
+                className="text-sm text-gray-700 hover:underline lg:text-sm"
               >
                 {user.name}
               </Link>
-              <span className="lg:text-xs text-xs text-gray-500 text-md">
+              <span className="text-md text-xs text-gray-500 lg:text-xs">
                 {dateTimeFormatter.format(createdAt)}
               </span>
             </div>
-            <span className="ml-auto ">
-            <TweetCardOptionsButton tweetId={id} authorId={user.id}/>
+            <span className="ml-auto">
+              <TweetCardOptionsButton tweetId={id} authorId={user.id} />
             </span>
-
           </div>
-          <div className="md:mx-[40px] mt-3 flex flex-col mx-1">
+          <div className="mx-1 mt-3 flex flex-col md:mx-[40px]">
             <Link href={`/blogPage/${id}`}>
-              <p className="break-words lg:text-2xl text-xl font-semibold hover:text-[#3b49df]">
+              <p className="break-words text-xl font-semibold hover:text-[#3b49df] lg:text-2xl">
                 {header}
               </p>
             </Link>
           </div>
-          <div className="mb-2 mt-2 px-12 lg:text-sm text-lg text-[#414b5a]">
-            {tags?.split(",").map((tag, index) => (
-              <span key={index} className="mr-3">
-                {tag}
-              </span>
-            ))}
-          </div>
+          {tags && tags.trim().length > 0 && (
+            <div className="mb-2 mt-2 px-12 text-sm text-[#414b5a]">
+              {tags
+                .split(/\s+/)
+                .filter(Boolean)
+                .map((tag) => (
+                  <span
+                    key={tag}
+                    className="mr-3 inline-flex items-center rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+            </div>
+          )}
+
           <div className="">
-            <div className="lg:ml-[30px] md:ml-[30px] flex flex-row gap-2 text-sm">
+            <div className="flex flex-row gap-2 text-sm md:ml-[30px] lg:ml-[30px]">
               <button
                 // onClick={() => toggleReaction()}
                 className={`flex h-10 items-center gap-2 rounded-md px-2 ${likedByMe ? "bg-blue-700 text-white" : "hover:bg-[#f5f5f5]"}`}
@@ -127,7 +133,7 @@ export function InfiniteTweetList({
               </button>
               <Link
                 href={`/blogPage/${id}`}
-                className="flex h-10 items-center gap-2 rounded-md px-[80px] md:px-2 lg:px-2 hover:bg-[#f5f5f5] "
+                className="flex h-10 items-center gap-2 rounded-md px-[80px] hover:bg-[#f5f5f5] md:px-2 lg:px-2"
               >
                 <ChatBubbleBottomCenterIcon className="h-4 w-4 text-black" />
                 <span>
@@ -137,7 +143,7 @@ export function InfiniteTweetList({
                 </span>
               </Link>
             </div>
-            <div className="mx-1 mt-4 mb-4">
+            <div className="mx-1 mb-4 mt-4">
               <div>
                 <ul className="space-y-2">
                   {comments.slice(0, 2).map((comment) => (
@@ -164,7 +170,9 @@ export function InfiniteTweetList({
                 </ul>
                 {comments.length > 2 && (
                   <Link href={`/blogPage/${id}`}>
-                    <div className="text-sm ml-[30px] mt-8 mb-3 text-gray-500">See all {comments.length} comments</div>
+                    <div className="mb-3 ml-[30px] mt-8 text-sm text-gray-500">
+                      See all {comments.length} comments
+                    </div>
                   </Link>
                 )}
               </div>
@@ -177,19 +185,17 @@ export function InfiniteTweetList({
 
   return (
     <div className="space-y-[7px]">
-    {tweets.map((tweet) => (
-      <TweetCard key={tweet.id} {...tweet} />
-    ))}
-  
-    {hasMore && (
-      <div ref={ref} className="h-10" /> // 👈 sentinel for scroll detection
-    )}
-    
-  
-    {isFetchingNextPage && (
-      <p className="text-center text-gray-500">Loading more...</p>
-    )}
-  </div>
-  
+      {tweets.map((tweet) => (
+        <TweetCard key={tweet.id} {...tweet} />
+      ))}
+
+      {hasMore && (
+        <div ref={ref} className="h-10" /> // 👈 sentinel for scroll detection
+      )}
+
+      {isFetchingNextPage && (
+        <p className="text-center text-gray-500">Loading more...</p>
+      )}
+    </div>
   );
 }

@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/consistent-type-imports */
 import { useSession } from "next-auth/react";
 import { FormEvent, useRef, useState } from "react";
@@ -5,7 +9,6 @@ import { api } from "~/utils/api";
 import { Button } from "./Button";
 import dynamic from "next/dynamic";
 import "react-quill/dist/quill.snow.css"; // Import Quill styles
-
 
 const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
@@ -16,13 +19,14 @@ export function NewTweetForm() {
   return <Form />;
 }
 
-
 function Form() {
   const { data: session } = useSession();
   const [header, setHeader] = useState("");
   const [content, setContent] = useState(""); // Keep as HTML content
   const [tags, setTags] = useState<string[]>([]);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
 
   const createTweet = api.tweet.create.useMutation({
     onSuccess: () => {
@@ -42,8 +46,51 @@ function Form() {
       }
     }
   }
+  async function uploadToCloudinary(file: File) {
+    setUploading(true);
+    setUploadError(null);
 
-  
+    try {
+      // 1) get signature from your server
+      const signRes = await fetch("/api/cloudinary/sign", { method: "POST" });
+      if (!signRes.ok) throw new Error("Failed to get upload signature");
+      const { timestamp, signature, folder } = (await signRes.json()) as {
+        timestamp: number;
+        signature: string;
+        folder: string;
+      };
+
+      // 2) upload directly to Cloudinary
+      const cloudName = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!;
+      const apiKey = process.env.NEXT_PUBLIC_CLOUDINARY_API_KEY!;
+
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("api_key", apiKey);
+      formData.append("timestamp", String(timestamp));
+      formData.append("signature", signature);
+      formData.append("folder", folder);
+
+      const uploadRes = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { method: "POST", body: formData },
+      );
+
+      const uploadJson = await uploadRes.json();
+      if (!uploadRes.ok) {
+        throw new Error(uploadJson?.error?.message ?? "Upload failed");
+      }
+
+      // secure_url is what you store in Prisma
+      setImageUrl(uploadJson.secure_url as string);
+    } catch (err: any) {
+      setUploadError(err?.message ?? "Image upload failed");
+      setImageUrl(undefined);
+    } finally {
+      setUploading(false);
+    }
+  }
+
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
@@ -63,14 +110,38 @@ function Form() {
           className="flex w-[900px] flex-1 flex-col px-4 pt-16 lg:ml-36"
         >
           <div className="flex flex-col rounded-t-md border-x bg-white">
-            <input
-              type="text"
-              accept="image/*"
-              value={imageUrl ?? ""}
-              onChange={(e) => setImageUrl(e.target.value ?? undefined)}
-              className="text-md relative top-12 ml-20 mr-auto rounded-md border-2 p-1 text-center outline-none"
-              placeholder="Add Cover Image"
-            />
+            <div className="relative top-12 ml-20 mr-auto flex items-center gap-3">
+              <input
+                type="file"
+                accept="image/*"
+                disabled={uploading}
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) void uploadToCloudinary(file);
+                }}
+                className="rounded-md border-2 p-1 text-sm outline-none"
+              />
+
+              {uploading && (
+                <span className="text-sm text-gray-500">Uploading...</span>
+              )}
+              {imageUrl && (
+                <span className="text-sm text-green-600">Image added ✓</span>
+              )}
+            </div>
+
+            {uploadError && (
+              <p className="ml-16 mt-3 text-sm text-red-600">{uploadError}</p>
+            )}
+
+            {imageUrl && (
+              <img
+                src={imageUrl}
+                alt="Cover preview"
+                className="ml-16 mr-3 mt-4 h-44 rounded-md object-cover"
+              />
+            )}
+
             <textarea
               value={header}
               onChange={(e) => setHeader(e.target.value)}

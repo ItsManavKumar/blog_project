@@ -5,6 +5,8 @@ import { ProfileImage } from "./ProfileImage";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import ToggleSidebar from "./toggleSidebar";
 import SearchBar from "./SearchBar";
+import { Button } from "./Button";
+import { useRouter } from "next/router";
 
 interface NavLink {
   label: string;
@@ -22,6 +24,10 @@ const Navbar: React.FC = () => {
     setSidebarOpen(!sidebarOpen);
   };
 
+
+  const router = useRouter();
+  const active = router.pathname === "/";
+
   return (
     <>
       <nav
@@ -34,7 +40,15 @@ const Navbar: React.FC = () => {
               <Bars3Icon className="h-8 w-8 text-gray-500" />
             </button>
             <Link href="/" className="flex items-center">
-            <img src="/logo.svg" alt="Manav Kumar Logo" className="h-10 w-auto" />
+              <Button
+                variant="ghost"
+                small
+                className={
+                  active ? "border-blue-200 bg-blue-50 text-blue-700" : ""
+                }
+              >
+                Home
+              </Button>
             </Link>
             <div className=" ">
               <SearchBar />
