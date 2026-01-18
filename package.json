@@ -16,7 +16,7 @@
   "dependencies": {
     "@auth/prisma-adapter": "^1.6.0",
     "@heroicons/react": "^2.1.5",
-    "@prisma/client": "^6.19.2",
+    "@prisma/client": "6.19.2",
     "@supabase/supabase-js": "^2.44.4",
     "@t3-oss/env-nextjs": "^0.10.1",
     "@tanstack/react-query": "^5.50.0",
@@ -39,6 +39,13 @@
     "superjson": "^2.2.1",
     "zod": "^3.23.3"
   },
+"overrides": {
+  "prisma": "6.19.2",
+  "@prisma/client": "6.19.2",
+  "@prisma/engines": "6.19.2",
+  "@prisma/prisma-schema-wasm": "6.19.2",
+  "@prisma/schema-wasm": "6.19.2"
+},
   "devDependencies": {
     "@types/eslint": "^8.56.10",
     "@types/formidable": "^3.4.5",
@@ -53,7 +60,7 @@
     "postcss": "^8.4.39",
     "prettier": "^3.3.2",
     "prettier-plugin-tailwindcss": "^0.6.5",
-    "prisma": "^7.2.0",
+    "prisma": "6.19.2",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.5.4"
   },
